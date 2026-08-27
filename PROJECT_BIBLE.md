@@ -47,15 +47,27 @@ Related project: **The Human Species Project (HSP)** — Kyler's brand/Substack 
 - Scaffolded Next.js 15 project (TypeScript, Tailwind, App Router, src/ dir) in cloud workspace at `/tmp/wakefieldwrites`, to be transferred to Kyler's machine at `C:\Users\wakin\wakefieldwrites`
 - Next: build page structure (Home, Books/Store, Writing→Substack funnel, Projects/About), style around the book's theme, wire up PayPal button placeholder, prep for GitHub push + Vercel import
 
+### Session 2 — 2026-08-27
+- Confirmed the transferred scaffold on Kyler's machine: actually **Next.js 16.3.3** (not 15 as originally scaffolded — see `AGENTS.md` note on breaking changes vs. training data), TypeScript, Tailwind 4, App Router, all four pages (home, book, writing, projects) already built with real book-themed copy and a dark/gold visual theme
+- `npm install` — clean, 364 packages, 0 vulnerabilities
+- `npm run dev` — verified all four routes return 200 with no console/compile errors
+- `npm run build` — clean production build, all routes prerendered as static content, TypeScript passes
+- Fixed a `.gitignore` bug: the blanket `.env*` rule was also silently excluding `.env.local.example` (the template file meant to be committed) — added `!.env*.example` exception
+- Initialized git repo, first commit made (`aff2379`)
+- Kyler created the GitHub repo (`wakingking97/wakefieldwrites`, public) and pushed the initial commit himself
+- Added the book cover art (hardcover mockup, supplied by Kyler at `assets/images/`) to `public/images/book-cover.jpg`, wired into the homepage hero and the `/book` page via `next/image`; added `/assets` to `.gitignore` (raw staging asset, not needed in the deployed bundle since the copy in `public/` covers it) — committed (`e919bc5`) and pushed
+- Next: walk through Vercel import + deploy (domain/DNS intentionally out of scope until Kyler connects wakefieldwrites.com himself)
+
 ## 6. Open items / needs from Kyler
 
 - [ ] Real book description/back-cover copy (or confirm using the manuscript's own "About This Book" section)
 - [ ] PayPal Business account button ID(s) for the book product
-- [ ] HSP Substack URL
-- [ ] Author bio / photo for the site
+- [ ] HSP Substack URL (page currently uses a placeholder: `https://humanspeciesproject.substack.com`)
+- [ ] Author bio / photo for the site (projects page has placeholder bio copy)
 - [ ] Confirm final scope: book-store-first vs. broader personal hub
-- [ ] GitHub account ready for a new repo
+- [x] GitHub account ready for a new repo — done, repo live at `github.com/wakingking97/wakefieldwrites`
 - [ ] Vercel account ready to import that repo
+- [ ] DNS/domain connection for wakefieldwrites.com — Kyler handling this himself once deployed
 
 ## 7. How to pick this back up
 
