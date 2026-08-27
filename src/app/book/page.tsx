@@ -41,7 +41,16 @@ export default function BookPage() {
             </div>
             <div className="thread-rule my-6" />
             <p className="text-xs text-muted">
-              Also available on Amazon (ASIN B0H2HL3WDK).
+              Also available on{" "}
+              <a
+                href="https://www.amazon.com/dp/B0HFVXC1JC"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-accent hover:underline"
+              >
+                Amazon
+              </a>
+              .
             </p>
           </div>
         </div>

@@ -68,7 +68,7 @@ export default function PayPalButton() {
 
     const script = document.createElement("script");
     script.id = scriptId;
-    script.src = `https://www.paypal.com/sdk/js?client-id=${PAYPAL_CLIENT_ID}&components=hosted-buttons&currency=USD`;
+    script.src = `https://www.paypal.com/sdk/js?client-id=${PAYPAL_CLIENT_ID}&components=hosted-buttons&enable-funding=venmo&currency=USD`;
     script.onload = renderButton;
     document.body.appendChild(script);
   }, []);
@@ -95,7 +95,7 @@ export default function PayPalButton() {
           for exact steps.
         </p>
         <a
-          href="https://www.amazon.com/dp/B0H2HL3WDK"
+          href="https://www.amazon.com/dp/B0HFVXC1JC"
           target="_blank"
           rel="noopener noreferrer"
           className="mt-4 inline-block rounded-full bg-accent px-6 py-3 text-sm font-medium text-black transition-opacity hover:opacity-90"

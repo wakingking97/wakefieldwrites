@@ -33,7 +33,7 @@ Confirmed with Kyler on 2026-08-27:
 
 **Title:** Pulling the Thread: Perception, Control, and the System Behind Everything
 **Author:** Kyler Wakefield
-**Published:** Amazon, June 2026 (ASIN B0H2HL3WDK)
+**Published:** Amazon, June 2026 (ASIN B0HFVXC1JC)
 
 Core thesis: a documented, sourced argument that the same architecture of control — Education, Finance, Religion, Media, and Law — has been used across every empire and era in recorded history to manage perception and belief, not through secret conspiracy but through open, self-sustaining systems. The book is structured to mirror that architecture, moving from global scale down to the personal, then handing the reader five tools back (attention, money, identity, voice, community) in the final chapter.
 
@@ -56,12 +56,16 @@ Related project: **The Human Species Project (HSP)** — Kyler's brand/Substack 
 - Initialized git repo, first commit made (`aff2379`)
 - Kyler created the GitHub repo (`wakingking97/wakefieldwrites`, public) and pushed the initial commit himself
 - Added the book cover art (hardcover mockup, supplied by Kyler at `assets/images/`) to `public/images/book-cover.jpg`, wired into the homepage hero and the `/book` page via `next/image`; added `/assets` to `.gitignore` (raw staging asset, not needed in the deployed bundle since the copy in `public/` covers it) — committed (`e919bc5`) and pushed
+- **PayPal button is live-configured**: real `NEXT_PUBLIC_PAYPAL_CLIENT_ID` / `NEXT_PUBLIC_PAYPAL_HOSTED_BUTTON_ID` set in `.env.local` (gitignored, not committed); added `enable-funding=venmo` to the SDK script URL in `src/components/PayPalButton.tsx` so Venmo shows alongside PayPal. Verified live in a headless browser on `/book` — the real PayPal-hosted checkout renders (title "Pulling the Thread - Signed", $25.00 USD, Hardcover/Paperback variant selector, quantity, PayPal + Venmo buttons), not the "not configured" fallback, with zero console errors
+- **Amazon listing updated**: old ASIN `B0H2HL3WDK` replaced with the live listing `B0HFVXC1JC` everywhere it appeared (`src/app/book/page.tsx`, `src/components/PayPalButton.tsx` fallback link, and this doc's §4)
+- **Still needed — Kyler must add the same two PayPal env vars in the Vercel dashboard** (Project Settings → Environment Variables, for Production/Preview/Development) since `.env.local` never gets committed to git; without this the button will work locally but not on the live deployed site
 - Next: walk through Vercel import + deploy (domain/DNS intentionally out of scope until Kyler connects wakefieldwrites.com himself)
 
 ## 6. Open items / needs from Kyler
 
 - [ ] Real book description/back-cover copy (or confirm using the manuscript's own "About This Book" section)
-- [ ] PayPal Business account button ID(s) for the book product
+- [x] PayPal Business account button ID(s) for the book product — done, live-configured in `.env.local`
+- [ ] **Add the same PayPal env vars in Vercel** (Project Settings → Environment Variables): `NEXT_PUBLIC_PAYPAL_CLIENT_ID` and `NEXT_PUBLIC_PAYPAL_HOSTED_BUTTON_ID`, for Production, Preview, and Development — required or the live site's button won't work even though local dev does
 - [ ] HSP Substack URL (page currently uses a placeholder: `https://humanspeciesproject.substack.com`)
 - [ ] Author bio / photo for the site (projects page has placeholder bio copy)
 - [ ] Confirm final scope: book-store-first vs. broader personal hub
