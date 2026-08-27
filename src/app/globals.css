@@ -37,6 +37,15 @@ select option {
   color: #1a1a1a;
 }
 
+.nav-scroll {
+  mask-image: linear-gradient(90deg, black calc(100% - 24px), transparent 100%);
+  -webkit-mask-image: linear-gradient(
+    90deg,
+    black calc(100% - 24px),
+    transparent 100%
+  );
+}
+
 .thread-rule {
   background: linear-gradient(
     90deg,
@@ -82,4 +91,140 @@ select option {
   .book-cover-art {
     animation: none;
   }
+}
+
+/* Read a Sample flipbook (react-pageflip) */
+
+.sample-flipbook-wrap {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  padding: 1rem 0 2rem;
+}
+
+.sample-flipbook {
+  filter: drop-shadow(0 25px 40px rgba(0, 0, 0, 0.6));
+}
+
+.sample-page {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  background: #f2e9d8;
+  color: #241f18;
+  font-family: var(--font-serif);
+  box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.1);
+}
+
+.sample-page__inner {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 2rem 1.5rem 0.5rem;
+}
+
+.sample-page__eyebrow {
+  font-family: var(--font-sans);
+  font-size: 0.65rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: #9c7a3d;
+  margin-bottom: 0.75rem;
+}
+
+.sample-page__heading {
+  font-size: 1.25rem;
+  line-height: 1.3;
+  margin-bottom: 0.25rem;
+}
+
+.sample-page__subheading {
+  font-family: var(--font-sans);
+  font-size: 0.7rem;
+  font-style: italic;
+  color: #6b5c42;
+  margin-bottom: 1rem;
+}
+
+.sample-page__paragraph {
+  font-size: 0.82rem;
+  line-height: 1.7;
+  margin-bottom: 1rem;
+}
+
+.sample-page__paragraph--italic {
+  font-style: italic;
+}
+
+.sample-page__paragraph--bold {
+  font-weight: 700;
+}
+
+.sample-page__list {
+  list-style: decimal;
+  padding-left: 1.1rem;
+  font-size: 0.8rem;
+  line-height: 1.65;
+}
+
+.sample-page__list li {
+  margin-bottom: 0.85rem;
+}
+
+.sample-page__list-label {
+  font-family: var(--font-sans);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.sample-page__number {
+  flex-shrink: 0;
+  text-align: center;
+  font-family: var(--font-sans);
+  font-size: 0.65rem;
+  color: #8a7a5c;
+  padding: 0.5rem 0 1rem;
+}
+
+.sample-page--cover {
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 2rem;
+  background: linear-gradient(160deg, var(--surface), var(--background));
+  color: var(--foreground);
+  box-shadow: none;
+}
+
+.sample-page--cover .sample-page__eyebrow {
+  color: var(--accent);
+}
+
+.sample-page__cover-title {
+  font-size: 1.6rem;
+  margin-top: 1rem;
+}
+
+.sample-page__cover-subtitle {
+  font-family: var(--font-sans);
+  color: var(--muted);
+  font-size: 0.85rem;
+  line-height: 1.5;
+  margin-top: 0.75rem;
+  max-width: 20rem;
+}
+
+.sample-page__cover-subtitle--spaced {
+  margin-top: 2rem;
+}
+
+.sample-page__cover-author {
+  font-family: var(--font-sans);
+  margin-top: 2rem;
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
 }

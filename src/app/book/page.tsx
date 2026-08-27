@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import BookCover from "@/components/BookCover";
 import PayPalButton from "@/components/PayPalButton";
 
@@ -46,6 +47,13 @@ export default function BookPage() {
               .
             </p>
           </div>
+
+          <Link
+            href="/sample"
+            className="mt-4 block rounded-full border border-line px-6 py-3 text-center text-sm font-medium text-foreground transition-colors hover:border-accent"
+          >
+            Read a Sample
+          </Link>
         </div>
 
         <div className="space-y-6 text-base leading-8 text-muted">
