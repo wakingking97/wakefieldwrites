@@ -26,6 +26,17 @@ body {
   color: var(--foreground);
 }
 
+/* PayPal's hosted-button SDK renders plain, unstyled <select> elements
+   (variation/quantity pickers) directly into the page rather than inside
+   its checkout iframe, so they inherit our light body text color. That
+   reads fine on the closed select against our dark page, but the
+   browser's native option-list popup always renders on a light system
+   background -- making that same light text unreadable. Force dark,
+   readable option text regardless of inherited theme color. */
+select option {
+  color: #1a1a1a;
+}
+
 .thread-rule {
   background: linear-gradient(
     90deg,
@@ -36,4 +47,39 @@ body {
   );
   height: 1px;
   opacity: 0.6;
+}
+
+.book-cover-stage {
+  perspective: 1600px;
+}
+
+.book-cover-art {
+  animation: book-cover-float 10s ease-in-out infinite;
+  filter: drop-shadow(0 20px 30px rgba(0, 0, 0, 0.5));
+  mask-image: radial-gradient(
+    ellipse 62% 58% at 50% 46%,
+    black 30%,
+    transparent 88%
+  );
+  -webkit-mask-image: radial-gradient(
+    ellipse 62% 58% at 50% 46%,
+    black 30%,
+    transparent 88%
+  );
+}
+
+@keyframes book-cover-float {
+  0%,
+  100% {
+    transform: rotateY(-22deg) translateY(0);
+  }
+  50% {
+    transform: rotateY(22deg) translateY(-14px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .book-cover-art {
+    animation: none;
+  }
 }

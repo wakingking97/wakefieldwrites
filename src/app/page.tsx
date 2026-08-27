@@ -1,5 +1,5 @@
-import Image from "next/image";
 import Link from "next/link";
+import BookCover from "@/components/BookCover";
 
 export default function Home() {
   return (
@@ -17,7 +17,7 @@ export default function Home() {
             I&rsquo;m Kyler Wakefield. I write about the architecture of power
             and control — how it has operated across every empire, every era,
             and how it operates on all of us right now. My book,{" "}
-            <em className="text-foreground not-italic font-medium">
+            <em className="text-foreground not-italic font-medium whitespace-nowrap">
               Pulling the Thread
             </em>
             , is where that argument is laid out in full: sourced,
@@ -39,15 +39,8 @@ export default function Home() {
           </div>
         </div>
 
-        <Link href="/book" className="block">
-          <Image
-            src="/images/book-cover.jpg"
-            alt="Pulling the Thread, by Kyler Wakefield — hardcover book"
-            width={1264}
-            height={843}
-            priority
-            className="w-full rounded-lg border border-line transition-opacity hover:opacity-90"
-          />
+        <Link href="/book" className="block transition-opacity hover:opacity-90">
+          <BookCover priority />
         </Link>
       </section>
 
@@ -92,7 +85,8 @@ export default function Home() {
           forget.&rdquo;
         </blockquote>
         <p className="mt-4 text-sm text-muted">
-          — from the Introduction, <em>Pulling the Thread</em>
+          — from the Introduction,{" "}
+          <em className="whitespace-nowrap">Pulling the Thread</em>
         </p>
       </section>
     </div>
