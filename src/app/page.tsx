@@ -1,40 +1,54 @@
+import Image from "next/image";
 import Link from "next/link";
 
 export default function Home() {
   return (
     <div>
-      <section className="mx-auto max-w-5xl px-6 pt-20 pb-16 sm:pt-28">
-        <p className="mb-6 text-sm uppercase tracking-[0.2em] text-accent">
-          Author &middot; Researcher &middot; The Human Species Project
-        </p>
-        <h1 className="max-w-3xl font-serif text-4xl leading-tight sm:text-5xl">
-          The most powerful forces in history are the ones no one notices
-          until they fail.
-        </h1>
-        <p className="mt-6 max-w-2xl text-lg leading-8 text-muted">
-          I&rsquo;m Kyler Wakefield. I write about the architecture of power
-          and control — how it has operated across every empire, every era,
-          and how it operates on all of us right now. My book,{" "}
-          <em className="text-foreground not-italic font-medium">
-            Pulling the Thread
-          </em>
-          , is where that argument is laid out in full: sourced, documented,
-          and built so you can see it for yourself.
-        </p>
-        <div className="mt-10 flex flex-wrap gap-4">
-          <Link
-            href="/book"
-            className="rounded-full bg-accent px-6 py-3 text-sm font-medium text-black transition-opacity hover:opacity-90"
-          >
-            Get the Book
-          </Link>
-          <Link
-            href="/writing"
-            className="rounded-full border border-line px-6 py-3 text-sm font-medium text-foreground transition-colors hover:border-accent"
-          >
-            Read the Writing
-          </Link>
+      <section className="mx-auto grid max-w-5xl gap-12 px-6 pt-20 pb-16 sm:pt-28 md:grid-cols-[1.3fr_1fr] md:items-center">
+        <div>
+          <p className="mb-6 text-sm uppercase tracking-[0.2em] text-accent">
+            Author &middot; Researcher &middot; The Human Species Project
+          </p>
+          <h1 className="max-w-3xl font-serif text-4xl leading-tight sm:text-5xl">
+            The most powerful forces in history are the ones no one notices
+            until they fail.
+          </h1>
+          <p className="mt-6 max-w-2xl text-lg leading-8 text-muted">
+            I&rsquo;m Kyler Wakefield. I write about the architecture of power
+            and control — how it has operated across every empire, every era,
+            and how it operates on all of us right now. My book,{" "}
+            <em className="text-foreground not-italic font-medium">
+              Pulling the Thread
+            </em>
+            , is where that argument is laid out in full: sourced,
+            documented, and built so you can see it for yourself.
+          </p>
+          <div className="mt-10 flex flex-wrap gap-4">
+            <Link
+              href="/book"
+              className="rounded-full bg-accent px-6 py-3 text-sm font-medium text-black transition-opacity hover:opacity-90"
+            >
+              Get the Book
+            </Link>
+            <Link
+              href="/writing"
+              className="rounded-full border border-line px-6 py-3 text-sm font-medium text-foreground transition-colors hover:border-accent"
+            >
+              Read the Writing
+            </Link>
+          </div>
         </div>
+
+        <Link href="/book" className="block">
+          <Image
+            src="/images/book-cover.jpg"
+            alt="Pulling the Thread, by Kyler Wakefield — hardcover book"
+            width={1264}
+            height={843}
+            priority
+            className="w-full rounded-lg border border-line transition-opacity hover:opacity-90"
+          />
+        </Link>
       </section>
 
       <div className="thread-rule mx-auto max-w-5xl" />

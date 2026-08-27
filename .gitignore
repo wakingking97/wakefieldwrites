@@ -37,6 +37,9 @@ yarn-error.log*
 # vercel
 .vercel
 
+# raw/staging assets not meant for the deployed site (use public/ for those)
+/assets
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts

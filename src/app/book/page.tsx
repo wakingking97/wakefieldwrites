@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import PayPalButton from "@/components/PayPalButton";
 
 export const metadata: Metadata = {
@@ -21,15 +22,28 @@ export default function BookPage() {
       </p>
 
       <div className="mt-12 grid gap-12 sm:grid-cols-[1fr_1.3fr]">
-        <div className="rounded-lg border border-line bg-surface p-8">
-          <p className="text-sm font-medium text-foreground">Get the book</p>
-          <div className="mt-4">
-            <PayPalButton />
+        <div>
+          <Image
+            src="/images/book-cover.jpg"
+            alt="Pulling the Thread, by Kyler Wakefield — hardcover book"
+            width={1264}
+            height={843}
+            priority
+            className="w-full rounded-lg border border-line"
+          />
+
+          <div className="mt-8 rounded-lg border border-line bg-surface p-8">
+            <p className="text-sm font-medium text-foreground">
+              Get the book
+            </p>
+            <div className="mt-4">
+              <PayPalButton />
+            </div>
+            <div className="thread-rule my-6" />
+            <p className="text-xs text-muted">
+              Also available on Amazon (ASIN B0H2HL3WDK).
+            </p>
           </div>
-          <div className="thread-rule my-6" />
-          <p className="text-xs text-muted">
-            Also available on Amazon (ASIN B0H2HL3WDK).
-          </p>
         </div>
 
         <div className="space-y-6 text-base leading-8 text-muted">
