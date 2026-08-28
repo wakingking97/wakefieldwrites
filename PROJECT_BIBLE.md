@@ -159,7 +159,9 @@ Found and fixed two real bugs via direct REST testing *before* writing any page 
 
 `/reviews` is `export const dynamic = "force-dynamic"` — confirmed via the build output (○ static → ƒ dynamic) that without this it would have been statically prerendered at build time and never shown newly-approved reviews until the next deploy, since moderation happens directly in Supabase with no redeploy involved. Full flow verified end-to-end through the real UI: submitted a review via Playwright driving the actual form, confirmed it landed in the table, confirmed the public query still only returned Margaret's, then cleaned up the test row. Added "Reviews" to nav. Committed `4357c6f`.
 
-Step 2 (Store section redesign) still in progress as of this entry — see open items.
+**Step 2 — `/book` Store redesign:** restructured the purchase panel into the old site's two-tier pattern (5e), in this site's own copy/visual style. Tier 1: "Available wherever you prefer to shop" — Amazon + Barnes & Noble buttons (B&N link from Kyler: `barnesandnoble.com/w/pulling-the-thread-kyler-wakefield/1150213186?ean=9798256364335`). Tier 2: "Prefer to support the author directly?" / "Buy a signed copy from Kyler" — framing copy, then the existing `PayPalButton` component completely unchanged, just given better context, not rebuilt. The 3D `BookCover` visual is untouched per 5c0, reconfirmed directly by Kyler. The old single-line "Also available on Amazon" text is gone since Tier 1 now covers that properly with a real button — the one small removal in an otherwise purely additive restructure, called out explicitly rather than left silent. Verified via headless browser: both retailer links have correct hrefs, and PayPal still renders 4 live iframes (real checkout) after the restructure, confirming the change didn't break the working integration. Committed `826e5a1`.
+
+All five steps from this session are now done.
 
 ## 6. Open items / needs from Kyler
 
@@ -177,7 +179,7 @@ Step 2 (Store section redesign) still in progress as of this entry — see open 
 - [x] ~~Confirm whether Kyler owns the book cover art source file from Base44~~ — yes, `assets/images/1062.jpg`, in use as logo/favicon + `BookCover.tsx` (see 5c0/5e)
 - [x] ~~Build "About the Author" section~~ — done, live at `/about`, full verbatim bio + placeholder photo area (see 5g)
 - [x] ~~Build interactive Reviews section w/ submission form + Supabase storage~~ — done, live at `/reviews`, real Supabase table + RLS + verified end-to-end submission flow (see 5f/5g)
-- [ ] Redesign `/book` Store section: retailer buttons up top, "buy a signed copy directly" pitch below (pattern documented in 5e; **keep the existing 3D floating book as-is per 5c0** — additive only) — B&N link received from Kyler, in progress
+- [x] ~~Redesign `/book` Store section~~ — done, two-tier layout live (retailer buttons + signed-copy pitch), 3D BookCover kept as-is per 5c0 (see 5g)
 - [x] ~~Build Article Archive page~~ — done, live at `/archive` with placeholder data + sort toggle + Share button (see 5g); **still open: manual entries vs. RSS pull** — Kyler to decide
 
 ## 7. How to pick this back up
