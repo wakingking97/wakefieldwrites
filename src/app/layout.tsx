@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import "./globals.css";
 
@@ -24,8 +25,15 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           <div className="mx-auto flex max-w-5xl items-center justify-between gap-4 px-6 py-5">
             <Link
               href="/"
-              className="shrink-0 whitespace-nowrap font-serif text-lg tracking-tight"
+              className="flex shrink-0 items-center gap-2.5 whitespace-nowrap font-serif text-lg tracking-tight"
             >
+              <Image
+                src="/images/logo.png"
+                alt=""
+                width={28}
+                height={28}
+                className="rounded-full"
+              />
               Kyler Wakefield
             </Link>
             <nav className="nav-scroll flex gap-4 overflow-x-auto text-sm text-muted sm:gap-6">

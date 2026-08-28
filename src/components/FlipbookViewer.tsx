@@ -6,7 +6,15 @@ import { SAMPLE_PAGES, type SamplePage } from "./sampleContent";
 
 // react-pageflip touches the DOM at render time, so it can't be
 // server-rendered -- load it client-only to avoid a hydration mismatch.
-const HTMLFlipBook = dynamic(() => import("react-pageflip"), { ssr: false });
+// It also code-splits into its own JS chunk; without a loading fallback
+// and a reserved min-height on its wrapper, the page looks mostly blank
+// for however long that chunk takes to fetch and parse.
+const HTMLFlipBook = dynamic(() => import("react-pageflip"), {
+  ssr: false,
+  loading: () => (
+    <div className="sample-flipbook-loading">Loading the sample&hellip;</div>
+  ),
+});
 
 const CoverPage = forwardRef<HTMLDivElement>(function CoverPage(_props, ref) {
   return (

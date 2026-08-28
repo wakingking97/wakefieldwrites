@@ -98,12 +98,20 @@ select option {
 .sample-flipbook-wrap {
   display: flex;
   justify-content: center;
+  align-items: center;
   width: 100%;
+  min-height: 460px;
   padding: 1rem 0 2rem;
 }
 
 .sample-flipbook {
   filter: drop-shadow(0 25px 40px rgba(0, 0, 0, 0.6));
+}
+
+.sample-flipbook-loading {
+  font-family: var(--font-sans);
+  font-size: 0.85rem;
+  color: var(--muted);
 }
 
 .sample-page {
