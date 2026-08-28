@@ -186,6 +186,12 @@ Kyler also corrected the Archive page plan from step 5 of section 5e: it must NO
 
 **Author photo.** Kyler provided `assets/images/mme.png` (2.8MB, 1085×1449 full-body portrait). Resized to 900px wide (~297KB) via `sharp` before handing to `next/image`. Replaced the `/about` placeholder's `aspect-square` container with the photo's actual ~3:4 ratio instead of force-cropping a full-body shot into a square. Explicit width/height to avoid layout shift; alt text "Kyler Wakefield." Verified via screenshot: renders uncropped, undistorted. Committed `52adf66`.
 
+## 5j. Sample flipbook cover — real cover image on the front page — 2026-08-28
+
+Kyler wanted the `/sample` flipbook's first page ("Read a Sample" / "Pulling the Thread" title page) to show the actual book cover image instead of a plain text title page on a dark background — makes the flipbook read more like an actual physical book being opened. Originally logged as backlog-only ("not now"), then Kyler asked to send the fix now after seeing a screenshot of the plain-text page.
+
+**Resolved same day.** Reused the existing cover asset (`public/images/book-cover.jpg` — the same gold-thread 3D mockup image used by `BookCover.tsx` on `/book`), no regeneration. Confirmed by looking at the actual image that the title, subtitle, and author name are already legible on the cover art itself, so `CoverPage` in `FlipbookViewer.tsx` now just renders the image full-bleed via `next/image` with `fill` — no separate text overlay needed. Added a `.sample-page--front-cover` / `.sample-page__cover-image` CSS pair (`object-fit: cover`) instead of reusing the old `.sample-page--cover` text-page styling (kept for the "End of Sample" closer page, which still needs text layout). The source photo is landscape (1264×843) but the flipbook page is portrait, so a plain centered crop clipped the title's first two letters and the author name; tuned `object-position` to `45% center` — verified by iterating on real headless-browser screenshots (not guessed) — so title, subtitle, and "Kyler Wakefield" all stay fully in frame at both desktop and mobile widths, with the page background color-matched to the image's own dark tone so there's no visible seam. Verified page-flip still advances correctly to page 1 afterward with zero console errors. `npm run build` passes.
+
 ## 6. Open items / needs from Kyler
 
 - [x] ~~Real book description/back-cover copy~~ — using manuscript's own "About This Book" text, confirmed
@@ -204,6 +210,7 @@ Kyler also corrected the Archive page plan from step 5 of section 5e: it must NO
 - [x] ~~Redesign `/book` Store section~~ — done, two-tier layout live, later swapped to a buy-box sidebar layout per Kyler's follow-up (see 5g/5i)
 - [x] ~~Build Article Archive page~~ — done, live at `/archive`, pulling real articles from Substack's RSS feed with per-article Share links (see 5h)
 - [x] ~~Confirm whether Kyler owns the book cover art source file from Base44~~ — yes, `assets/images/1062.jpg`, in use as logo/favicon + `BookCover.tsx` (see 5c0/5e)
+- [x] ~~Make the `/sample` flipbook's first page show the real book cover image instead of plain text~~ — done, reusing `public/images/book-cover.jpg` (see 5j)
 
 ## 7. How to pick this back up
 

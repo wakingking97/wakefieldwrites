@@ -263,6 +263,17 @@ select option {
   box-shadow: none;
 }
 
+.sample-page--front-cover {
+  background: #0b0d10;
+  box-shadow: none;
+  overflow: hidden;
+}
+
+.sample-page__cover-image {
+  object-fit: cover;
+  object-position: 45% center;
+}
+
 .sample-page--cover .sample-page__eyebrow {
   color: var(--accent);
 }

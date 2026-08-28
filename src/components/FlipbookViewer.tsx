@@ -2,6 +2,7 @@
 
 import { forwardRef, useRef, useState } from "react";
 import dynamic from "next/dynamic";
+import Image from "next/image";
 import { SAMPLE_PAGES, type SamplePage } from "./sampleContent";
 
 // react-pageflip touches the DOM at render time, so it can't be
@@ -18,13 +19,15 @@ const HTMLFlipBook = dynamic(() => import("react-pageflip"), {
 
 const CoverPage = forwardRef<HTMLDivElement>(function CoverPage(_props, ref) {
   return (
-    <div ref={ref} className="sample-page sample-page--cover">
-      <p className="sample-page__eyebrow">Read a Sample</p>
-      <h1 className="sample-page__cover-title">Pulling the Thread</h1>
-      <p className="sample-page__cover-subtitle">
-        Perception, Control, and the System Behind Everything
-      </p>
-      <p className="sample-page__cover-author">Kyler Wakefield</p>
+    <div ref={ref} className="sample-page sample-page--front-cover">
+      <Image
+        src="/images/book-cover.jpg"
+        alt="Pulling the Thread, by Kyler Wakefield — book cover"
+        fill
+        priority
+        sizes="(max-width: 640px) 280px, 350px"
+        className="sample-page__cover-image"
+      />
     </div>
   );
 });
