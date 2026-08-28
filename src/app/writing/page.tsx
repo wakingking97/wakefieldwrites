@@ -7,8 +7,7 @@ export const metadata: Metadata = {
     "Ongoing writing from Kyler Wakefield via the Human Species Project on Substack.",
 };
 
-// PLACEHOLDER: replace with your actual Substack URL.
-const SUBSTACK_URL = "https://humanspeciesproject.substack.com";
+const SUBSTACK_URL = "https://thehumanspeciesproject.substack.com";
 
 export default function WritingPage() {
   return (
@@ -54,13 +53,6 @@ export default function WritingPage() {
           Subscribe
         </a>
       </div>
-
-      {SUBSTACK_URL.includes("PLACEHOLDER") && (
-        <p className="mt-6 text-xs text-muted">
-          Note for Kyler: set the real Substack URL in{" "}
-          <code className="text-accent">src/app/writing/page.tsx</code>.
-        </p>
-      )}
 
       <div className="thread-rule my-16" />
 

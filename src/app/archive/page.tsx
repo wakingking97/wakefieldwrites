@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import ArchiveList from "@/components/ArchiveList";
-import { ARCHIVE_ARTICLES } from "@/components/archiveArticles";
+import { getHspArticles } from "@/lib/hspFeed";
 
 export const metadata: Metadata = {
   title: "Archive — The Human Species Project | Kyler Wakefield",
@@ -9,7 +9,9 @@ export const metadata: Metadata = {
     "Browse articles from The Human Species Project, sorted newest first.",
 };
 
-export default function ArchivePage() {
+export default async function ArchivePage() {
+  const articles = await getHspArticles();
+
   return (
     <div className="mx-auto max-w-5xl px-6 py-16">
       <p className="text-sm uppercase tracking-[0.2em] text-accent">
@@ -28,15 +30,18 @@ export default function ArchivePage() {
         companion to that page, not a replacement for it.
       </p>
 
-      <div className="mt-6 rounded-lg border border-dashed border-line bg-surface p-4 text-sm text-muted">
-        <strong className="text-foreground">Example data below.</strong>{" "}
-        These articles aren&rsquo;t pulled from a live feed yet — they&rsquo;re
-        placeholder entries showing how this page will look once real
-        articles are added (manually or via an RSS pull from Substack).
-      </div>
-
       <div className="mt-12">
-        <ArchiveList articles={ARCHIVE_ARTICLES} />
+        {articles.length === 0 ? (
+          <p className="text-sm text-muted">
+            Couldn&rsquo;t load articles from Substack right now — try{" "}
+            <Link href="/writing" className="text-accent hover:underline">
+              reading on Substack
+            </Link>{" "}
+            directly instead.
+          </p>
+        ) : (
+          <ArchiveList articles={articles} />
+        )}
       </div>
     </div>
   );

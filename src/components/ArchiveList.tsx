@@ -3,23 +3,17 @@
 import { useMemo, useState } from "react";
 import Image from "next/image";
 import ShareButton from "./ShareButton";
-import type { ArchiveArticle } from "./archiveArticles";
-
-const SUBSTACK_URL = "https://humanspeciesproject.substack.com";
+import type { HspArticle } from "@/lib/hspFeed";
 
 function formatDate(iso: string) {
-  return new Date(`${iso}T00:00:00`).toLocaleDateString("en-US", {
+  return new Date(iso).toLocaleDateString("en-US", {
     month: "long",
     day: "numeric",
     year: "numeric",
   });
 }
 
-export default function ArchiveList({
-  articles,
-}: {
-  articles: ArchiveArticle[];
-}) {
+export default function ArchiveList({ articles }: { articles: HspArticle[] }) {
   const [order, setOrder] = useState<"newest" | "oldest">("newest");
 
   const sorted = useMemo(() => {
@@ -52,7 +46,10 @@ export default function ArchiveList({
 
       <div className="mt-6 divide-y divide-line border-t border-line">
         {sorted.map((article) => (
-          <article key={article.slug} className="flex flex-wrap items-start justify-between gap-4 py-6">
+          <article
+            key={article.link}
+            className="flex flex-wrap items-start justify-between gap-4 py-6"
+          >
             <div className="flex min-w-0 gap-4">
               <Image
                 src="/images/hsp-icon.png"
@@ -65,16 +62,27 @@ export default function ArchiveList({
                 <p className="text-xs uppercase tracking-[0.15em] text-accent">
                   {formatDate(article.date)}
                 </p>
-                <h2 className="mt-2 font-serif text-xl">{article.title}</h2>
-                <p className="mt-2 text-sm leading-6 text-muted">
-                  {article.blurb}
-                </p>
+                <h2 className="mt-2 font-serif text-xl">
+                  <a
+                    href={article.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:text-accent"
+                  >
+                    {article.title}
+                  </a>
+                </h2>
+                {article.blurb && (
+                  <p className="mt-2 text-sm leading-6 text-muted">
+                    {article.blurb}
+                  </p>
+                )}
               </div>
             </div>
             <ShareButton
               title={article.title}
-              text={article.blurb}
-              url={SUBSTACK_URL}
+              text={article.blurb ?? article.title}
+              url={article.link}
             />
           </article>
         ))}
