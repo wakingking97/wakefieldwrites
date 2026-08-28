@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 
 export const metadata: Metadata = {
   title: "About the Author | Kyler Wakefield",
@@ -75,6 +76,13 @@ export default function AboutPage() {
             it — and decided that making it wasn&rsquo;t enough if it
             didn&rsquo;t mean something.
           </p>
+          <Image
+            src="/images/kyler-signature.png"
+            alt=""
+            width={640}
+            height={150}
+            className="signature-img h-auto w-48 opacity-90"
+          />
         </div>
       </div>
     </div>

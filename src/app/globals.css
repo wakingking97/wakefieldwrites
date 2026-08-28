@@ -93,6 +93,19 @@ select option {
   }
 }
 
+.signature-img {
+  mask-image: radial-gradient(
+    ellipse 60% 55% at 50% 50%,
+    black 40%,
+    transparent 92%
+  );
+  -webkit-mask-image: radial-gradient(
+    ellipse 60% 55% at 50% 50%,
+    black 40%,
+    transparent 92%
+  );
+}
+
 /* Read a Sample flipbook (react-pageflip) */
 
 .sample-flipbook-wrap {

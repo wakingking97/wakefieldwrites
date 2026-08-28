@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 
 export const metadata: Metadata = {
   title: "Writing — The Human Species Project | Kyler Wakefield",
@@ -12,12 +13,23 @@ const SUBSTACK_URL = "https://humanspeciesproject.substack.com";
 export default function WritingPage() {
   return (
     <div className="mx-auto max-w-5xl px-6 py-16">
-      <p className="text-sm uppercase tracking-[0.2em] text-accent">
-        Writing
-      </p>
-      <h1 className="mt-4 font-serif text-4xl leading-tight sm:text-5xl">
-        The Human Species Project
-      </h1>
+      <div className="flex items-center gap-5">
+        <Image
+          src="/images/hsp-icon.png"
+          alt="The Human Species Project"
+          width={240}
+          height={218}
+          className="h-[72px] w-[72px] rounded-full border border-line object-cover"
+        />
+        <div>
+          <p className="text-sm uppercase tracking-[0.2em] text-accent">
+            Writing
+          </p>
+          <h1 className="mt-1 font-serif text-4xl leading-tight sm:text-5xl">
+            The Human Species Project
+          </h1>
+        </div>
+      </div>
       <p className="mt-6 max-w-2xl text-lg leading-8 text-muted">
         The book is where the full argument is laid out. The Human Species
         Project is where the thread keeps getting pulled — ongoing dispatches,

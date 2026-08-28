@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import Image from "next/image";
 import ShareButton from "./ShareButton";
 import type { ArchiveArticle } from "./archiveArticles";
 
@@ -52,14 +53,23 @@ export default function ArchiveList({
       <div className="mt-6 divide-y divide-line border-t border-line">
         {sorted.map((article) => (
           <article key={article.slug} className="flex flex-wrap items-start justify-between gap-4 py-6">
-            <div className="max-w-2xl">
-              <p className="text-xs uppercase tracking-[0.15em] text-accent">
-                {formatDate(article.date)}
-              </p>
-              <h2 className="mt-2 font-serif text-xl">{article.title}</h2>
-              <p className="mt-2 text-sm leading-6 text-muted">
-                {article.blurb}
-              </p>
+            <div className="flex min-w-0 gap-4">
+              <Image
+                src="/images/hsp-icon.png"
+                alt=""
+                width={240}
+                height={218}
+                className="mt-1 h-9 w-9 shrink-0 rounded-full border border-line"
+              />
+              <div className="max-w-2xl">
+                <p className="text-xs uppercase tracking-[0.15em] text-accent">
+                  {formatDate(article.date)}
+                </p>
+                <h2 className="mt-2 font-serif text-xl">{article.title}</h2>
+                <p className="mt-2 text-sm leading-6 text-muted">
+                  {article.blurb}
+                </p>
+              </div>
             </div>
             <ShareButton
               title={article.title}

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import BookCover from "@/components/BookCover";
 import PayPalButton from "@/components/PayPalButton";
@@ -57,6 +58,13 @@ export default function BookPage() {
             <p className="mt-1 font-serif text-lg text-foreground">
               Buy a signed copy from Kyler
             </p>
+            <Image
+              src="/images/kyler-signature.png"
+              alt=""
+              width={640}
+              height={150}
+              className="signature-img mt-3 h-auto w-40 opacity-90"
+            />
             <p className="mt-3 text-sm leading-6 text-muted">
               Every copy ordered here is personally signed and ships
               directly from the author. Same book &mdash; you just
