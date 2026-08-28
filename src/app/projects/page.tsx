@@ -30,6 +30,15 @@ export default function ProjectsPage() {
       <h2 className="font-serif text-2xl">Projects</h2>
       <div className="mt-8 grid gap-8 sm:grid-cols-2">
         <Link
+          href="/about"
+          className="block rounded-lg border border-line bg-surface p-6 transition-colors hover:border-accent"
+        >
+          <h3 className="font-serif text-xl">About the Author</h3>
+          <p className="mt-2 text-sm leading-6 text-muted">
+            The full story behind the book, in Kyler&rsquo;s own words.
+          </p>
+        </Link>
+        <Link
           href="/book"
           className="block rounded-lg border border-line bg-surface p-6 transition-colors hover:border-accent"
         >
