@@ -148,6 +148,12 @@ Kyler asked for all remaining open items in one pass, in order, each verified wi
 
 Found and fixed a real bug during verification, not just eyeballing the screenshot: the two-column grid (`grid-cols-[1fr_1.6fr]`, same pattern as `/book`'s working layout) rendered as `1200px 115px` instead of a proportional ~1:1.6 split — confirmed via computed-style inspection, not assumption. Classic CSS Grid "implied minimum size" issue: the `aspect-square` photo placeholder has no intrinsic content, so its track inflated. Fixed with `min-w-0` on both grid children; re-verified the computed columns split ~357px/571px as intended. Committed `4574401`.
 
+**Step 5 — `/archive` page:** built next since it also needed no input from Kyler (uses hardcoded placeholder data, per his instructions). Lists articles with title/blurb/date/Share button, newest-first by default with a sort toggle (`src/components/ArchiveList.tsx`, "use client" for the sort state). Data lives in `src/components/archiveArticles.ts` — one real example from the old Base44 site ("A Rich Man's War", see 5e) plus three illustrative placeholders in the same voice, file explicitly comments this needs replacing once there's a real data source. `ShareButton.tsx` prefers the Web Share API, falls back to clipboard copy with a "Link copied" confirmation. Page explicitly frames itself as a companion to `/writing`, not a replacement — `/writing` itself untouched. Added "Archive" to nav.
+
+Verified both ShareButton code paths individually rather than assuming one covered both: headless Chromium turned out to expose `navigator.share`, so a plain click only exercised that branch; re-tested with `navigator.share` stubbed to `undefined` to force the fallback, and confirmed via `navigator.clipboard.readText()` that the correct URL actually landed on the clipboard and the button reverted after 2s. Committed `c688063`.
+
+**Open question for Kyler — Archive data source:** manual entries (Kyler adds articles himself here) or pull automatically from Substack's RSS feed? Not decided yet — page works fine with either once chosen, no rush.
+
 ## 6. Open items / needs from Kyler
 
 - [x] ~~Real book description/back-cover copy~~ — using manuscript's own "About This Book" text, confirmed
@@ -165,7 +171,7 @@ Found and fixed a real bug during verification, not just eyeballing the screensh
 - [x] ~~Build "About the Author" section~~ — done, live at `/about`, full verbatim bio + placeholder photo area, nav link + `/projects` card added (see 5f)
 - [ ] Build interactive Reviews section w/ submission form + Supabase storage, starting with Margaret's review (content ready — see 5d; old-site pattern documented in 5e)
 - [ ] Redesign `/book` Store section: retailer buttons up top, "buy a signed copy directly" pitch below (pattern documented in 5e; **keep the existing 3D floating book as-is per 5c0** — additive only)
-- [ ] Build Article Archive page (richer replacement/companion to `/writing` — pattern documented in 5e; needs a data source for HSP articles, manual or RSS)
+- [x] ~~Build Article Archive page~~ — done, live at `/archive` with placeholder data + sort toggle + Share button (see 5f); **still open: manual entries vs. RSS pull** — Kyler to decide
 
 ## 7. How to pick this back up
 
