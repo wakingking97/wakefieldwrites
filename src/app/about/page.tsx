@@ -16,8 +16,14 @@ export default function AboutPage() {
       </h1>
 
       <div className="mt-12 grid gap-12 sm:grid-cols-[1fr_1.6fr]">
-        <div className="flex aspect-square min-w-0 items-center justify-center rounded-lg border border-dashed border-line bg-surface p-6 text-center text-sm text-muted">
-          Author photo coming soon
+        <div className="min-w-0">
+          <Image
+            src="/images/author-photo.jpg"
+            alt="Kyler Wakefield"
+            width={900}
+            height={1202}
+            className="w-full rounded-lg border border-line object-cover"
+          />
         </div>
 
         <div className="min-w-0 space-y-6 text-base leading-8 text-muted">
@@ -81,7 +87,7 @@ export default function AboutPage() {
             alt=""
             width={640}
             height={150}
-            className="signature-img h-auto w-48 opacity-90"
+            className="h-auto w-48 opacity-90"
           />
         </div>
       </div>
