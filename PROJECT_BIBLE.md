@@ -163,6 +163,10 @@ Found and fixed two real bugs via direct REST testing *before* writing any page 
 
 All five steps from this session are now done.
 
+**Follow-up same session — images.** Kyler dropped three more images into `assets/images/`: the Human Species Project's emblem logo, a decorative gold "Kyler Wakefield" signature graphic, and a promotional "Thank You" flyer (HSP logo + book cover + Facebook CTA + tagline, all composited into one image). Used the first two, skipped the third — the flyer has too much baked-in text/CTAs to work as a responsive site element (can't resize without breaking readability, "FOLLOW US ON FACEBOOK" as flat image text isn't real navigation); it's suited to an email or social post, not the site's own UI.
+
+Cropped an icon-only version of the HSP emblem (`public/images/hsp-icon.png`) after the full lockup-with-text version read illegibly when first tried at a small 72px badge size — used on `/writing` next to the heading, and per-article on `/archive` cards (the latter matching the old Base44 site's documented per-article-logo pattern from 5e, which the archive build hadn't picked up). Cropped the signature graphic tighter around the text (`public/images/kyler-signature.png`) and placed it on `/book`'s "Buy a signed copy from Kyler" tier and as a closing flourish under the bio on `/about` — both literally about a signature. Applied the same radial-mask feathering technique already used on `BookCover.tsx` to the signature (its background was a slightly different dark tone than `--surface`, showing a faint box edge before masking). Verified all four pages via headless browser: zero console errors, every placement screenshotted and visually confirmed. Committed `de4917f`.
+
 ## 6. Open items / needs from Kyler
 
 - [x] ~~Real book description/back-cover copy~~ — using manuscript's own "About This Book" text, confirmed
