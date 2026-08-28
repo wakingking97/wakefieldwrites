@@ -100,7 +100,7 @@ select option {
   justify-content: center;
   align-items: center;
   width: 100%;
-  min-height: 460px;
+  min-height: 430px;
   padding: 1rem 0 0.5rem;
 }
 
@@ -208,8 +208,8 @@ select option {
 }
 
 .sample-page__paragraph {
-  font-size: 0.82rem;
-  line-height: 1.7;
+  font-size: 0.86rem;
+  line-height: 1.72;
   margin-bottom: 1rem;
 }
 
@@ -224,8 +224,8 @@ select option {
 .sample-page__list {
   list-style: decimal;
   padding-left: 1.1rem;
-  font-size: 0.8rem;
-  line-height: 1.65;
+  font-size: 0.87rem;
+  line-height: 1.7;
 }
 
 .sample-page__list li {

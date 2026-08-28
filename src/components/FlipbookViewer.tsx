@@ -70,7 +70,7 @@ const ContentPage = forwardRef<
           </p>
         ))}
         {page.list && (
-          <ol className="sample-page__list">
+          <ol className="sample-page__list" start={page.listStart ?? 1}>
             {page.list.map((item, i) => (
               <li key={i}>
                 <span className="sample-page__list-label">{item.label}</span>
@@ -118,12 +118,12 @@ export default function FlipbookViewer() {
         <HTMLFlipBook
           ref={bookRef}
           width={350}
-          height={500}
+          height={475}
           size="stretch"
           minWidth={280}
-          maxWidth={500}
-          minHeight={400}
-          maxHeight={700}
+          maxWidth={400}
+          minHeight={380}
+          maxHeight={670}
           maxShadowOpacity={0.5}
           showCover={true}
           mobileScrollSupport={true}

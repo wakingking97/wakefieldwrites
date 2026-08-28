@@ -15,6 +15,7 @@ export type SamplePage = {
   heading?: string;
   paragraphs?: Paragraph[];
   list?: ArchitectureItem[];
+  listStart?: number; // continues numbering when a list spans pages
 };
 
 // Verbatim front-matter text from Pulling the Thread, sourced from
@@ -110,6 +111,11 @@ export const SAMPLE_PAGES: SamplePage[] = [
         label: "RELIGION",
         text: "Manufactured consent, justified hierarchy, managed belief. Not an attack on faith — a documented historical argument about how organized religion has been used by ruling classes to manage populations.",
       },
+    ],
+  },
+  {
+    listStart: 4,
+    list: [
       {
         label: "MEDIA AND INFORMATION",
         text: "Controlling what people know and how they see the world. From the printing press to Hollywood to the news cycle. The ancestor of every perception management system documented in this book.",
@@ -232,6 +238,10 @@ export const SAMPLE_PAGES: SamplePage[] = [
       {
         text: "This is not about conspiracy. Conspiracies require secrecy. This system operates openly. It works not because it is hidden, but because it controls what you perceive as real — and perception is total control.",
       },
+    ],
+  },
+  {
+    paragraphs: [
       {
         text: "You don't need to control people. You only need to control what they see, what they focus on, who they think the enemy is, what solutions they think exist, what they believe they deserve — and what they are still capable of feeling.",
       },
