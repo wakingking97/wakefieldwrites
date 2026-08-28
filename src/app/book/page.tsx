@@ -28,24 +28,43 @@ export default function BookPage() {
 
           <div className="mt-8 rounded-lg border border-line bg-surface p-8">
             <p className="text-sm font-medium text-foreground">
-              Get the book
+              Available wherever you prefer to shop
             </p>
-            <div className="mt-4">
-              <PayPalButton />
-            </div>
-            <div className="thread-rule my-6" />
-            <p className="text-xs text-muted">
-              Also available on{" "}
+            <div className="mt-4 flex flex-wrap gap-3">
               <a
                 href="https://www.amazon.com/dp/B0HFVXC1JC"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-accent hover:underline"
+                className="flex-1 rounded-full border border-line px-5 py-3 text-center text-sm font-medium text-foreground transition-colors hover:border-accent"
               >
                 Amazon
               </a>
-              .
+              <a
+                href="https://www.barnesandnoble.com/w/pulling-the-thread-kyler-wakefield/1150213186?ean=9798256364335"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex-1 rounded-full border border-line px-5 py-3 text-center text-sm font-medium text-foreground transition-colors hover:border-accent"
+              >
+                Barnes &amp; Noble
+              </a>
+            </div>
+          </div>
+
+          <div className="mt-6 rounded-lg border border-line bg-surface p-8">
+            <p className="text-sm font-medium text-foreground">
+              Prefer to support the author directly?
             </p>
+            <p className="mt-1 font-serif text-lg text-foreground">
+              Buy a signed copy from Kyler
+            </p>
+            <p className="mt-3 text-sm leading-6 text-muted">
+              Every copy ordered here is personally signed and ships
+              directly from the author. Same book &mdash; you just
+              can&rsquo;t get this one on Amazon.
+            </p>
+            <div className="mt-5">
+              <PayPalButton />
+            </div>
           </div>
 
           <Link
