@@ -138,6 +138,16 @@ Kyler pointed to the live Base44 site (https://wakefieldwrites.base44.app/) — 
 
 **Confirmed why the old site is being fully replaced, not just re-pointed:** the Base44 site being reachable at wakefieldwrites.base44.app is just Base44's free-tier subdomain still running — it is NOT evidence the old build could still serve wakefieldwrites.com. Kyler confirmed Base44 requires paying for their "builder package" to use a custom domain at all, which is exactly the subscription cost he's avoiding by building this himself with Claude Code + Next.js + Vercel + Supabase. The Base44 site is being used purely as a reference/idea source (design, copy, structure) — not as something to keep paying for or migrate back to.
 
+## 5f. Session 3 — 2026-08-27 — five-step build (bug fix + 4 new features)
+
+Kyler asked for all remaining open items in one pass, in order, each verified with real browser checks (not just "it compiled") and committed separately so any step can be reviewed/rolled back independently. Hard rule restated and followed throughout: additive only, never remove/replace existing content without asking first.
+
+**Step 1 — `/sample` blank page (5c):** already fixed in a prior session (see 5c above) — re-verified working with a fresh `npm run dev` + real browser screenshot + click-to-flip before starting anything else, since the bug report on disk (from a stale doc snapshot) suggested otherwise.
+
+**Step 3 — `/about` page:** built ahead of Steps 2/4 since it needed no input from Kyler. Chose a dedicated `/about` page over adding to `/projects` — the bio is long and personal (six paragraphs on addiction/recovery), and a new page is purely additive (zero risk of altering `/projects`'s existing content), vs. editing `/projects`'s placeholder bio which the "additive only" rule would make riskier even though Kyler's instructions permitted either. Full verbatim bio from 5d, photo area is a clearly marked "Author photo coming soon" placeholder. Added to nav and as a new card on `/projects` (existing cards untouched).
+
+Found and fixed a real bug during verification, not just eyeballing the screenshot: the two-column grid (`grid-cols-[1fr_1.6fr]`, same pattern as `/book`'s working layout) rendered as `1200px 115px` instead of a proportional ~1:1.6 split — confirmed via computed-style inspection, not assumption. Classic CSS Grid "implied minimum size" issue: the `aspect-square` photo placeholder has no intrinsic content, so its track inflated. Fixed with `min-w-0` on both grid children; re-verified the computed columns split ~357px/571px as intended. Committed `4574401`.
+
 ## 6. Open items / needs from Kyler
 
 - [x] ~~Real book description/back-cover copy~~ — using manuscript's own "About This Book" text, confirmed
@@ -152,7 +162,7 @@ Kyler pointed to the live Base44 site (https://wakefieldwrites.base44.app/) — 
 - [ ] Confirm final scope: book-store-first vs. broader personal hub
 - [x] ~~Fix the blank `/sample` flipbook page~~ — resolved (see 5c), plus a follow-on text-cutoff fix, gold flip controls, and a page-fullness pass — verified via headless browser incl. real touch-swipe on mobile, re-verified again this session
 - [x] ~~Confirm whether Kyler owns the book cover art source file from Base44~~ — yes, it's `assets/images/1062.jpg`, already in use as the site logo/favicon and the `BookCover.tsx` 3D treatment (see 5c0/5e)
-- [ ] Build "About the Author" section (content ready — see 5d)
+- [x] ~~Build "About the Author" section~~ — done, live at `/about`, full verbatim bio + placeholder photo area, nav link + `/projects` card added (see 5f)
 - [ ] Build interactive Reviews section w/ submission form + Supabase storage, starting with Margaret's review (content ready — see 5d; old-site pattern documented in 5e)
 - [ ] Redesign `/book` Store section: retailer buttons up top, "buy a signed copy directly" pitch below (pattern documented in 5e; **keep the existing 3D floating book as-is per 5c0** — additive only)
 - [ ] Build Article Archive page (richer replacement/companion to `/writing` — pattern documented in 5e; needs a data source for HSP articles, manual or RSS)
