@@ -271,7 +271,7 @@ select option {
 
 .sample-page__cover-image {
   object-fit: cover;
-  object-position: 45% center;
+  object-position: 44% center;
 }
 
 .sample-page--cover .sample-page__eyebrow {

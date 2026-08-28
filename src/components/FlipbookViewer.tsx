@@ -21,7 +21,7 @@ const CoverPage = forwardRef<HTMLDivElement>(function CoverPage(_props, ref) {
   return (
     <div ref={ref} className="sample-page sample-page--front-cover">
       <Image
-        src="/images/book-cover.jpg"
+        src="/images/book-cover-flat.jpg"
         alt="Pulling the Thread, by Kyler Wakefield — book cover"
         fill
         priority
