@@ -13,7 +13,6 @@ export type ArchitectureItem = {
 export type SamplePage = {
   eyebrow?: string;
   heading?: string;
-  subheading?: string;
   paragraphs?: Paragraph[];
   list?: ArchitectureItem[];
 };
@@ -21,6 +20,10 @@ export type SamplePage = {
 // Verbatim front-matter text from Pulling the Thread, sourced from
 // sample-content.md (Kyler-provided excerpt of the manuscript's front
 // matter through the opening of Part One). Do not paraphrase or shorten.
+// Pages are sized to fit without scrolling on a phone-width page. Only
+// the page where a section actually begins carries its eyebrow/heading --
+// continuation pages are headerless, the way a real book doesn't
+// reprint the chapter title on every page.
 export const SAMPLE_PAGES: SamplePage[] = [
   {
     eyebrow: "About This Book",
@@ -53,6 +56,10 @@ export const SAMPLE_PAGES: SamplePage[] = [
       {
         text: "Politicians tell people what to see, what to think, and what to hear. This book does the opposite. Every chapter lays out documented evidence, verified sources, and honest questions. Then it steps back. What you conclude from what you read belongs to you — not to the author. A conclusion you reach yourself cannot be taken from you. Nobody can call it propaganda. Nobody can call it manipulation. Because this book never tells you what it means. It shows you what's there and asks the questions.",
       },
+    ],
+  },
+  {
+    paragraphs: [
       {
         text: "That is the methodology. Build the picture clearly enough that the reader can see it for themselves. Ask the questions out loud. Follow them to their logical end. And decide what you're looking at.",
       },
@@ -68,6 +75,10 @@ export const SAMPLE_PAGES: SamplePage[] = [
       {
         text: "This book is built to mirror the system it documents. Not just in its words — in its structure. The reader moves through this book the same way they moved through the system itself. It begins on a global scale where the pattern is clearest and hardest to deny. Then it moves closer to home where the same pattern operates but is harder to see because you are living inside it. Then it explains why you couldn't see it. Then it gives you the tools to act on what you now see. The reader experiences the book the way they experienced the system — disoriented at first, then recognizing patterns, then arriving at clarity, then deciding what to do with it.",
       },
+    ],
+  },
+  {
+    paragraphs: [
       {
         text: "Chapter 11, Claiming The Architecture of Power and Control, mirrors The Architecture itself. The system used five tools against you: Education, Finance, Media, Law, and Religion. Chapter 11 returns five tools to you: your attention, your money, your identity, your voice, and your community. The same structure. Pointed in a different direction. The reader who sees that will feel it like a key turning in a lock.",
       },
@@ -84,6 +95,8 @@ export const SAMPLE_PAGES: SamplePage[] = [
         text: "Every chapter in this book documents the same architecture operating across different eras, different scales, and different contexts. This architecture has many tools — more than any single book could fully document. But five appear consistently across every empire, every ruling class, every system of organized power in recorded history. These are the five tools this book focuses on. Not because they are the only tools. Because they are the most documented, the most consistently used, and the most relevant to understanding the world you live in right now. Once you can see them clearly you will recognize them everywhere — you will also start noticing the others on your own.",
       },
     ],
+  },
+  {
     list: [
       {
         label: "EDUCATION",
@@ -108,9 +121,6 @@ export const SAMPLE_PAGES: SamplePage[] = [
     ],
   },
   {
-    eyebrow: "About This Book",
-    heading: "The Architecture of Power and Control",
-    subheading: "continued",
     paragraphs: [
       {
         text: "Chapter 2 introduces all five tools of The Architecture historically. Every chapter that follows shows The Architecture operating in a different context. The reader who finishes this book will never look at education, finance, religion, media, or law the same way again.",
@@ -118,6 +128,10 @@ export const SAMPLE_PAGES: SamplePage[] = [
       {
         text: "These five tools appear consistently across every empire, every ruling class, every system of organized power in recorded history. Not because the people who built them copied each other. Because concentrated power always reaches for the same mechanisms. The pattern is not political. It is natural. It operates in every force — in physics, in ecosystems, in theology, in the weather, in the daily life of every human being on earth. The architecture documented in this book is the human version of something much older than humanity.",
       },
+    ],
+  },
+  {
+    paragraphs: [
       {
         text: "The Truth Behind Power is a parallel research document — six completed chapters covering the birth of administrative power, financial systems, the American Century, and the cracks in the modern order. It is not a second book being written simultaneously. It is the research archive this book draws from for historical depth.",
       },
@@ -153,8 +167,6 @@ export const SAMPLE_PAGES: SamplePage[] = [
     ],
   },
   {
-    eyebrow: "Dedication",
-    subheading: "continued",
     paragraphs: [
       {
         text: "For the ones who will close this book before they open it.",
@@ -241,8 +253,6 @@ export const SAMPLE_PAGES: SamplePage[] = [
     ],
   },
   {
-    eyebrow: "Introduction",
-    heading: "I Couldn't Unsee It",
     paragraphs: [
       {
         text: "The first thing I did was ask a question I'd never thought to ask before. Is this really what Iran looks like? Is this what these places really are? It sounds almost embarrassing to admit — that I had to ask. But that's the point. I never needed to ask. The picture had been so consistent, across so many films and so many news cycles, for so many years, that the question had never had a reason to form.",
@@ -253,20 +263,20 @@ export const SAMPLE_PAGES: SamplePage[] = [
     ],
   },
   {
-    eyebrow: "Introduction",
-    heading: "I Couldn't Unsee It",
     paragraphs: [
       {
         text: 'It wasn\'t even hidden. In 1943 the precursor to the CIA circulated an internal government memo describing cinema as "one of the most powerful propaganda weapons at the disposal of the United States." The Director of the Office of War Information stated openly that the easiest way to plant an idea in people\'s minds is through an entertainment picture — "when they do not realize they are being propagandized." They wrote it down. They said it out loud to each other. The only people who weren\'t told were the ones sitting in the theater.',
       },
+    ],
+  },
+  {
+    paragraphs: [
       {
         text: "And it wasn't just Americans sitting in those theaters. Top Gun didn't stay inside U.S. borders. Neither did Black Hawk Down. Neither did Zero Dark Thirty. Hollywood exports American culture to every corner of the world — and with it, American government-approved narratives about who the enemies are, what those countries look like, and why the wars are necessary. What started as a domestic perception management system became a global one. The entire world was being shown the same carefully shaped picture.",
       },
     ],
   },
   {
-    eyebrow: "Introduction",
-    heading: "I Couldn't Unsee It",
     paragraphs: [
       {
         text: "What I found when I started pulling that thread didn't stop at Hollywood. It never does. The same system that controlled what you saw on the screen also shapes what you read in the news, what you are taught in school, what you are trained to feel — and crucially, what you are trained to stop feeling. It operates through financial systems that discipline entire governments. Through media cycles designed to exhaust your attention before it can become action. Through political division engineered to keep you fighting the person next to you instead of examining the system above you. Through an education that teaches you the symbols of democracy while leaving out the documented evidence of how policy gets made. And through careful management of what stories get told, how far they go, and who — if anyone — is ever held accountable for them.",
@@ -274,8 +284,6 @@ export const SAMPLE_PAGES: SamplePage[] = [
     ],
   },
   {
-    eyebrow: "Introduction",
-    heading: "I Couldn't Unsee It",
     paragraphs: [
       {
         text: "These are not separate problems. They are one system. Not a conspiracy — conspiracies require secrecy and active coordination. This is something older and more durable than that. It is something unnatural that has been running long enough and consistently enough that it has developed the self-sustaining properties of a natural system. It no longer needs a hand on the wheel. The incentives are baked in. The behavior reproduces itself without anyone directing it — the way a river doesn't need to be told to flow downhill. That is what makes it so difficult to see and so difficult to stop. And it is older than America. It has been used on every population in every era of recorded history. The names change. The tools evolve. The architecture stays the same. And the further you pull the thread, the more of the architecture you find.",
@@ -283,20 +291,20 @@ export const SAMPLE_PAGES: SamplePage[] = [
     ],
   },
   {
-    eyebrow: "Introduction",
-    heading: "I Couldn't Unsee It",
     paragraphs: [
       {
         text: "This book walks through that architecture. Not to make you angry. Not to tell you what to think. But to walk you down the same path I had to walk myself — so that by the end, you can see it clearly enough to name it. And once you can name it, it loses the power it only ever had because you couldn't see it.",
       },
+    ],
+  },
+  {
+    paragraphs: [
       {
         text: "I am not a professor. I am not a journalist or a politician or a Washington insider. This journey started this year. I began asking questions I had never thought to ask — about power, about how the world came to work the way it does, and about why it stays that way. The more I asked, the more I found. And somewhere along the way I realized that finding the truth wasn't enough. That the mission had to be sharing it. The footage of Tehran was the moment that made that mission impossible to ignore. This book is what happens when ordinary people start asking questions the system never intended them to ask. I am not going to tell you what to think. I am not going to tell you what to believe. But I will promise you this — by the time you finish this book, you will not walk through the world the same way you did when you started.",
       },
     ],
   },
   {
-    eyebrow: "Introduction",
-    heading: "I Couldn't Unsee It",
     paragraphs: [
       {
         text: "And underneath all of it — underneath the coups and the media cycles and the tax code and the tribal identities the system built for you — is the thing none of it ever managed to destroy. Before you are American or Russian, Democrat or Republican, rich or poor — you are human. That is the oldest truth there is. And it is the one truth the system has always needed you to forget.",
@@ -316,6 +324,10 @@ export const SAMPLE_PAGES: SamplePage[] = [
         text: "There is no rush here. The truth has been waiting a long time already. It can wait a few more minutes while you catch your breath.",
         emphasis: "italic",
       },
+    ],
+  },
+  {
+    paragraphs: [
       {
         text: "What follows is documented. Sourced. Verifiable. It is not designed to frighten you or overwhelm you. But it may do both of those things anyway — not because the information is presented that way, but because the gap between what we have been told and what is actually true carries a weight that honest people feel.",
         emphasis: "italic",
@@ -343,9 +355,6 @@ export const SAMPLE_PAGES: SamplePage[] = [
     ],
   },
   {
-    eyebrow: "Part One",
-    heading: "The View From 30,000 Feet",
-    subheading: "continued",
     paragraphs: [
       {
         text: "What follows begins far from home. It begins at a global scale — with empires, intelligence agencies, foreign policy decisions made in rooms most people will never see. Not because those things are more important than your daily life. But because distance strips away the noise. When you're looking at a country you've never lived in, a war you've never fought in, a government you've never voted for — you can see the machinery without the interference of personal identity. You can look at what actually happened, who actually decided it, and who actually paid for it. Clearly. Without the fog of partisan loyalty or national pride telling you what you're allowed to conclude.",
@@ -353,9 +362,6 @@ export const SAMPLE_PAGES: SamplePage[] = [
     ],
   },
   {
-    eyebrow: "Part One",
-    heading: "The View From 30,000 Feet",
-    subheading: "continued",
     paragraphs: [
       {
         text: "And once you can see it clearly from that distance — once the architecture of power becomes undeniable at global scale — something shifts. Because you start recognizing the same shapes closer to home. The same mechanisms. The same patterns. The same results. Just smaller. Just quieter. Just dressed in more familiar language.",
