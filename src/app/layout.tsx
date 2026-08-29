@@ -25,6 +25,10 @@ const OUTBOUND_LINKS = [
     href: "https://www.linkedin.com/in/kyler-wakefield-48200b403/",
     label: "LinkedIn",
   },
+  {
+    href: "https://www.facebook.com/profile.php?id=61590903470323",
+    label: "HSP on Facebook",
+  },
 ];
 
 const NAV_LINKS = [

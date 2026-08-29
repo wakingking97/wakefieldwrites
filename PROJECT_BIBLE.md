@@ -188,6 +188,10 @@ Built all five items from the 5i/5j credibility pass, all additive, nothing remo
 
 No "founder / builder / legacy-maker" language was added anywhere, per Kyler's explicit instruction in 5i.
 
+## 5l. HSP Facebook page added to footer — 2026-08-28
+
+Added the HSP Facebook page (`https://www.facebook.com/profile.php?id=61590903470323`, label "HSP on Facebook") to the site footer's outbound links in `src/app/layout.tsx`, alongside Substack/Amazon/LinkedIn from 5k. URL confirmed directly by Kyler this session.
+
 **Verification:** `npm run build` — clean, all 14 routes (12 previous + `/contact` + `/privacy`) compile and prerender as static content except `/reviews` (unchanged, still force-dynamic for moderation). Also ran the dev server and did a real headless-browser pass (Playwright driving local Edge, since no project-specific run skill or `chromium-cli` existed yet) — screenshots taken of `/projects` (Other Projects/Korale card), `/contact`, `/privacy`, and the home page footer; all matched the intended design and content. Confirmed via curl against the dev server that `/book`'s rendered `<head>` contains the full og:/twitter: tag set with correct absolute URLs.
 
 ## 5l. Fixed: /reviews showing "not configured" on live site — 2026-08-29
