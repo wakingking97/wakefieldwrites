@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 import { pageMetadata, SITE_URL } from "@/lib/metadata";
 import type { Metadata } from "next";
@@ -56,7 +57,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
               />
               Kyler Wakefield
             </Link>
-            <nav className="nav-scroll flex gap-4 overflow-x-auto text-sm text-muted sm:gap-6">
+            <nav className="nav-scroll flex gap-4 overflow-x-auto pr-6 text-sm text-muted sm:gap-6">
               {NAV_LINKS.map((link) => (
                 <Link
                   key={link.href}
@@ -102,6 +103,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
             </div>
           </div>
         </footer>
+        <Analytics />
       </body>
     </html>
   );
