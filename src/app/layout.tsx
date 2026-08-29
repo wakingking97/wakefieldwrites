@@ -1,13 +1,30 @@
-import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import "./globals.css";
+import { pageMetadata, SITE_URL } from "@/lib/metadata";
+import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Kyler Wakefield — Pulling the Thread",
-  description:
-    "Author of Pulling the Thread: Perception, Control, and the System Behind Everything. Writing, the book, and the Human Species Project.",
+  metadataBase: new URL(SITE_URL),
+  ...pageMetadata({
+    title: "Kyler Wakefield — Pulling the Thread",
+    description:
+      "Author of Pulling the Thread: Perception, Control, and the System Behind Everything. Writing, the book, and the Human Species Project.",
+    path: "/",
+  }),
 };
+
+const OUTBOUND_LINKS = [
+  { href: "https://thehumanspeciesproject.substack.com", label: "Substack" },
+  {
+    href: "https://www.amazon.com/stores/Kyler-Wakefield/author/B0H6H2N9ZC",
+    label: "Amazon Author Page",
+  },
+  {
+    href: "https://www.linkedin.com/in/kyler-wakefield-48200b403/",
+    label: "LinkedIn",
+  },
+];
 
 const NAV_LINKS = [
   { href: "/", label: "Home" },
@@ -58,10 +75,31 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <footer className="border-t border-line">
           <div className="mx-auto max-w-5xl px-6 py-10 text-sm text-muted">
             <div className="thread-rule mb-8" />
-            <p>
+            <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
+              {OUTBOUND_LINKS.map((link) => (
+                <a
+                  key={link.href}
+                  href={link.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="transition-colors hover:text-foreground"
+                >
+                  {link.label}
+                </a>
+              ))}
+            </div>
+            <p className="mt-6">
               &copy; {new Date().getFullYear()} Kyler Wakefield. Pulling the
               Thread — Perception, Control, and the System Behind Everything.
             </p>
+            <div className="mt-3 flex flex-wrap gap-x-5 gap-y-2 text-xs">
+              <Link href="/contact" className="transition-colors hover:text-foreground">
+                Contact
+              </Link>
+              <Link href="/privacy" className="transition-colors hover:text-foreground">
+                Privacy Policy
+              </Link>
+            </div>
           </div>
         </footer>
       </body>

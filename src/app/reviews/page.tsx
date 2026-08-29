@@ -1,12 +1,13 @@
-import type { Metadata } from "next";
 import ReviewForm from "@/components/ReviewForm";
 import { isSupabaseConfigured, supabase, type Review } from "@/lib/supabase";
+import { pageMetadata } from "@/lib/metadata";
 
-export const metadata: Metadata = {
+export const metadata = pageMetadata({
   title: "Reviews — Pulling the Thread | Kyler Wakefield",
   description:
     "Read what others thought of Pulling the Thread, then share your own experience.",
-};
+  path: "/reviews",
+});
 
 // Reviews are moderated in Supabase directly (no redeploy involved), so
 // this page must fetch fresh on every request -- otherwise a newly

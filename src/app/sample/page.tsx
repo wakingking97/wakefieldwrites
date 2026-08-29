@@ -1,12 +1,13 @@
-import type { Metadata } from "next";
 import Link from "next/link";
 import FlipbookViewer from "@/components/FlipbookViewer";
+import { pageMetadata } from "@/lib/metadata";
 
-export const metadata: Metadata = {
+export const metadata = pageMetadata({
   title: "Read a Sample — Pulling the Thread | Kyler Wakefield",
   description:
     "Read the front matter of Pulling the Thread: Perception, Control, and the System Behind Everything, by Kyler Wakefield — free, before you buy.",
-};
+  path: "/sample",
+});
 
 export default function SamplePage() {
   return (

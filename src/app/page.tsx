@@ -1,5 +1,13 @@
 import Link from "next/link";
 import BookCover from "@/components/BookCover";
+import { pageMetadata } from "@/lib/metadata";
+
+export const metadata = pageMetadata({
+  title: "Kyler Wakefield — Pulling the Thread",
+  description:
+    "Author of Pulling the Thread: Perception, Control, and the System Behind Everything. Writing, the book, and the Human Species Project.",
+  path: "/",
+});
 
 export default function Home() {
   return (

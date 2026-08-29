@@ -1,10 +1,13 @@
-import type { Metadata } from "next";
 import Link from "next/link";
+import OtherProjectCard from "@/components/OtherProjectCard";
+import { OTHER_PROJECTS } from "@/lib/otherProjects";
+import { pageMetadata } from "@/lib/metadata";
 
-export const metadata: Metadata = {
+export const metadata = pageMetadata({
   title: "Projects | Kyler Wakefield",
   description: "Projects and work from Kyler Wakefield.",
-};
+  path: "/projects",
+});
 
 export default function ProjectsPage() {
   return (
@@ -64,6 +67,18 @@ export default function ProjectsPage() {
         More projects coming. This page is built to grow — new cards can be
         added here anytime.
       </p>
+
+      <div className="thread-rule my-16" />
+
+      <h2 className="font-serif text-2xl">Other Projects</h2>
+      <p className="mt-3 max-w-2xl text-sm leading-7 text-muted">
+        Other things I&rsquo;m building, outside of writing.
+      </p>
+      <div className="mt-8 grid gap-8 sm:grid-cols-2">
+        {OTHER_PROJECTS.map((project) => (
+          <OtherProjectCard key={project.url} project={project} />
+        ))}
+      </div>
     </div>
   );
 }

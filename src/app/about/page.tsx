@@ -1,11 +1,13 @@
-import type { Metadata } from "next";
 import Image from "next/image";
+import { pageMetadata } from "@/lib/metadata";
 
-export const metadata: Metadata = {
+export const metadata = pageMetadata({
   title: "About the Author | Kyler Wakefield",
   description:
     "About Kyler Wakefield, author of Pulling the Thread: Perception, Control, and the System Behind Everything.",
-};
+  path: "/about",
+  image: "/images/author-photo.jpg",
+});
 
 export default function AboutPage() {
   return (

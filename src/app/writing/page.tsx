@@ -1,11 +1,12 @@
-import type { Metadata } from "next";
 import Image from "next/image";
+import { pageMetadata } from "@/lib/metadata";
 
-export const metadata: Metadata = {
+export const metadata = pageMetadata({
   title: "Writing — The Human Species Project | Kyler Wakefield",
   description:
     "Ongoing writing from Kyler Wakefield via the Human Species Project on Substack.",
-};
+  path: "/writing",
+});
 
 const SUBSTACK_URL = "https://thehumanspeciesproject.substack.com";
 

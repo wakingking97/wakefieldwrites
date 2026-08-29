@@ -1,13 +1,14 @@
-import type { Metadata } from "next";
 import Link from "next/link";
 import ArchiveList from "@/components/ArchiveList";
 import { getHspArticles } from "@/lib/hspFeed";
+import { pageMetadata } from "@/lib/metadata";
 
-export const metadata: Metadata = {
+export const metadata = pageMetadata({
   title: "Archive — The Human Species Project | Kyler Wakefield",
   description:
     "Browse articles from The Human Species Project, sorted newest first.",
-};
+  path: "/archive",
+});
 
 export default async function ArchivePage() {
   const articles = await getHspArticles();

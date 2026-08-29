@@ -1,14 +1,15 @@
-import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import BookCover from "@/components/BookCover";
 import PayPalButton from "@/components/PayPalButton";
+import { pageMetadata } from "@/lib/metadata";
 
-export const metadata: Metadata = {
+export const metadata = pageMetadata({
   title: "Pulling the Thread — The Book | Kyler Wakefield",
   description:
     "Pulling the Thread: Perception, Control, and the System Behind Everything, by Kyler Wakefield.",
-};
+  path: "/book",
+});
 
 export default function BookPage() {
   return (
