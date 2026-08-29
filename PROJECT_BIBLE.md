@@ -190,6 +190,21 @@ No "founder / builder / legacy-maker" language was added anywhere, per Kyler's e
 
 **Verification:** `npm run build` — clean, all 14 routes (12 previous + `/contact` + `/privacy`) compile and prerender as static content except `/reviews` (unchanged, still force-dynamic for moderation). Also ran the dev server and did a real headless-browser pass (Playwright driving local Edge, since no project-specific run skill or `chromium-cli` existed yet) — screenshots taken of `/projects` (Other Projects/Korale card), `/contact`, `/privacy`, and the home page footer; all matched the intended design and content. Confirmed via curl against the dev server that `/book`'s rendered `<head>` contains the full og:/twitter: tag set with correct absolute URLs.
 
+## 5l. Fixed: /reviews showing "not configured" on live site — 2026-08-29
+
+Kyler reported wakefieldwrites.com/reviews was showing the "Review submissions aren't configured yet" fallback in production, meaning `NEXT_PUBLIC_SUPABASE_URL` / `NEXT_PUBLIC_SUPABASE_ANON_KEY` weren't reaching the app at runtime.
+
+**Root cause, confirmed by checking each layer in order:**
+1. `.env.local` — correct. URL matches the right project (`kpyyvuvqonykzzdcxtmd`), and the anon key's JWT payload decodes to `"role": "anon"` (not `service_role`).
+2. `src/lib/supabase.ts` — correct. Exact var names, read via direct `process.env.NEXT_PUBLIC_...` (not a dynamic/computed key, so Next.js's build-time inlining works as expected).
+3. **Vercel production env vars — this was the actual cause.** `vercel env ls` showed only the PayPal `NEXT_PUBLIC_*` vars existed in the project at all; the two Supabase vars had never been added to Vercel in any environment (not "missing from Production specifically" — missing everywhere). They were set locally but never pushed to Vercel.
+
+**Fix:** installed the Vercel CLI (`npx vercel`), linked the project (`kyler-wakefields-projects/wakefieldwrites`), and added both vars via `vercel env add ... --no-sensitive` to Production, Preview, and Development — same "Config" (non-secret) type as the existing PayPal vars, since these are meant to be client-readable. Then ran `vercel deploy --prod` to bake them into a fresh build (adding a Vercel env var doesn't retroactively affect an already-built deployment).
+
+**Verified against the live site**, not just curl (Supabase client init is client-side): drove real Edge via Playwright to wakefieldwrites.com/reviews — the "not configured" message is gone, the form renders, no console errors. Margaret's review was already present and approved in the `reviews` table (seeded earlier, `id 1`, `created_at` 2026-08-28 — nothing further needed there). Filled out and submitted the actual live form as a real end-to-end test; confirmed via direct SQL against the Supabase project that the row landed (`id 7`, `approved: false`, exactly the text submitted) — proving the full path (browser → anon key → Supabase insert → RLS) works.
+
+**Left for Kyler:** that `id 7` test row needs deleting — Claude Code's Supabase MCP connection to this project is read-only, and (correctly, by design) the anon-key RLS policy on `reviews` only allows `INSERT` and `SELECT` of `approved = true` rows, no `DELETE` — so this had to stop short of self-cleaning. See open items.
+
 ## 6. Open items / needs from Kyler
 
 - [x] ~~Real book description/back-cover copy~~ — using manuscript's own "About This Book" text, confirmed
@@ -204,7 +219,8 @@ No "founder / builder / legacy-maker" language was added anywhere, per Kyler's e
 - [ ] Confirm final scope: book-store-first vs. broader personal hub — still open, not blocking anything
 - [ ] Fix the blank `/sample` flipbook page (see bug report 5c) — sent to Claude Code, confirm fixed next check-in (nav now shows a "Read a Sample" link as of 2026-08-28, suggests this may already be resolved — verify)
 - [ ] Build "About the Author" section (content ready — see 5d) — sent to Claude Code along with photo instructions 2026-08-28, confirm live
-- [ ] Build interactive Reviews section w/ submission form + Supabase storage, starting with Margaret's review (content ready — see 5d; old-site pattern documented in 5e; Supabase project + credentials ready, see 5f) — sent to Claude Code, confirm live
+- [x] ~~Build interactive Reviews section w/ submission form + Supabase storage, starting with Margaret's review~~ — form and Supabase wiring built earlier; **the env-var wiring to Vercel was missing until 2026-08-29, see 5l** — confirmed live now, Margaret's review confirmed already seeded and approved in the DB
+- [ ] **Delete a leftover test review row from Supabase** (see 5l) — `reviews` table, `id = 7`, `name = 'Claude Code Verification Test'`. Claude Code couldn't delete it directly (MCP connection to this project is read-only, and the anon-key RLS policy only permits INSERT + SELECT-of-approved, no DELETE — by design, so moderation stays admin-only). It's `approved = false` so it won't show on the live page, but it should be cleared out of the table via Supabase Table Editor.
 - [ ] Redesign `/book` Store section: retailer buttons up top, "buy a signed copy directly" pitch below (pattern documented in 5e) — sent to Claude Code, PLUS a follow-up layout swap request 2026-08-28 (description text right column, store cards stay left under cover — see annotated screenshot instructions given directly to Claude Code) — confirm both are live and match
 - [ ] Build Article Archive page pulling live from Substack RSS (pattern in 5e, RSS requirement in 5g) — sent to Claude Code, confirm live and confirm it's NOT showing hardcoded placeholder articles
 - [ ] Confirm whether Kyler owns the book cover art source file from Base44, or if a new one needs to be made — still open; note the 3D book mockup on /book already exists and uses this cover art, so this may be moot if that asset is already secured locally
