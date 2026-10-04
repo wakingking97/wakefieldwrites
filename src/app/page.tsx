@@ -1,6 +1,9 @@
 import Link from "next/link";
 import BookCover from "@/components/BookCover";
+import { getPublishedInsights, teaser } from "@/lib/insights";
 import { pageMetadata } from "@/lib/metadata";
+
+export const revalidate = 300;
 
 export const metadata = pageMetadata({
   title: "Kyler Wakefield — Pulling the Thread",
@@ -9,7 +12,9 @@ export const metadata = pageMetadata({
   path: "/",
 });
 
-export default function Home() {
+export default async function Home() {
+  const [latestInsight] = await getPublishedInsights(1);
+
   return (
     <div>
       <section className="mx-auto grid max-w-5xl gap-12 px-6 pt-20 pb-16 sm:pt-28 md:grid-cols-[1.3fr_1fr] md:items-center">
@@ -82,6 +87,29 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {latestInsight && (
+        <>
+          <div className="thread-rule mx-auto max-w-5xl" />
+          <section className="mx-auto max-w-5xl px-6 py-12">
+            <Link
+              href={`/insights/${latestInsight.slug}`}
+              className="block rounded-lg border border-line bg-surface p-6 transition-colors hover:border-accent"
+            >
+              <p className="text-xs uppercase tracking-[0.15em] text-accent">
+                Latest Insight
+              </p>
+              <h2 className="mt-2 font-serif text-xl">{latestInsight.title}</h2>
+              <p className="mt-2 text-sm leading-6 text-muted">
+                {teaser(latestInsight)}
+              </p>
+              <span className="mt-3 inline-block text-sm text-accent">
+                Read more &rarr;
+              </span>
+            </Link>
+          </section>
+        </>
+      )}
 
       <div className="thread-rule mx-auto max-w-5xl" />
 

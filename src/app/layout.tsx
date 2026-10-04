@@ -38,6 +38,7 @@ const NAV_LINKS = [
   { href: "/reviews", label: "Reviews" },
   { href: "/writing", label: "Writing" },
   { href: "/archive", label: "Archive" },
+  { href: "/insights", label: "Insights" },
   { href: "/about", label: "About" },
   { href: "/projects", label: "Projects" },
 ];

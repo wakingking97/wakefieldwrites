@@ -10,15 +10,18 @@ export function pageMetadata({
   description,
   path,
   image = DEFAULT_OG_IMAGE,
+  keywords,
 }: {
   title: string;
   description: string;
   path: string;
   image?: string;
+  keywords?: string[];
 }): Metadata {
   return {
     title,
     description,
+    ...(keywords?.length ? { keywords } : {}),
     alternates: { canonical: path },
     openGraph: {
       title,
