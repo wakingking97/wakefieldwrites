@@ -1,17 +1,48 @@
 import type { Metadata } from "next";
 import { createClient } from "@/lib/supabase-server";
-import { INSIGHT_COLUMNS, type Insight } from "@/lib/insights";
+import {
+  CATEGORIES,
+  CATEGORY_FILTER_LABELS,
+  CATEGORY_LABELS,
+  INSIGHT_COLUMNS,
+  type Insight,
+  type InsightCategory,
+} from "@/lib/insights";
+import CheckSubstackButton from "./CheckSubstackButton";
 import { createDraft, deleteInsight, publishInsight, saveInsight } from "./actions";
 
 export const metadata: Metadata = { title: "Insights" };
+
+// "Check Substack now" runs the AI drafting job inside this route's action.
+export const maxDuration = 300;
 
 const inputClass =
   "mt-1 w-full rounded-md border border-line bg-background px-3 py-2 text-sm text-foreground";
 const labelClass = "block text-xs uppercase tracking-[0.15em] text-muted";
 
-function Fields({ insight }: { insight?: Insight }) {
+function Fields({
+  insight,
+  defaultCategory = "substack",
+}: {
+  insight?: Insight;
+  defaultCategory?: InsightCategory;
+}) {
   return (
     <div className="grid gap-4">
+      <label className={labelClass}>
+        Category
+        <select
+          name="category"
+          defaultValue={insight?.category ?? defaultCategory}
+          className={inputClass}
+        >
+          {CATEGORIES.map((c) => (
+            <option key={c} value={c}>
+              {CATEGORY_FILTER_LABELS[c]} — {CATEGORY_LABELS[c]}
+            </option>
+          ))}
+        </select>
+      </label>
       <label className={labelClass}>
         Title
         <input name="title" required defaultValue={insight?.title} className={inputClass} />
@@ -31,10 +62,11 @@ function Fields({ insight }: { insight?: Insight }) {
         />
       </label>
       <label className={labelClass}>
-        Keywords (comma-separated)
-        <input
+        Keywords (one per line)
+        <textarea
           name="keywords"
-          defaultValue={insight?.keywords.join(", ")}
+          rows={5}
+          defaultValue={insight?.keywords.join(String.fromCharCode(10))}
           className={inputClass}
         />
       </label>
@@ -49,21 +81,19 @@ function Fields({ insight }: { insight?: Insight }) {
         />
       </label>
       <label className={labelClass}>
-        Substack URL
+        Substack URL (required for Substack posts)
         <input
           name="substack_url"
           type="url"
-          required
-          defaultValue={insight?.substack_url}
+          defaultValue={insight?.substack_url ?? ""}
           className={inputClass}
         />
       </label>
       <label className={labelClass}>
-        Substack title
+        Substack title (required for Substack posts)
         <input
           name="substack_title"
-          required
-          defaultValue={insight?.substack_title}
+          defaultValue={insight?.substack_title ?? ""}
           className={inputClass}
         />
       </label>
@@ -89,7 +119,7 @@ function InsightCard({ insight }: { insight: Insight }) {
             published ? "text-accent" : "text-muted"
           }`}
         >
-          {published ? "Published" : "Draft"}
+          {published ? "Published" : "Draft"} &middot; {CATEGORY_LABELS[insight.category]}
         </span>
         <span className="text-xs text-muted">
           {new Date(insight.published_at ?? insight.created_at).toLocaleDateString()}
@@ -146,6 +176,8 @@ export default async function AdminInsightsPage({
         {drafts.length} pending &middot; {published.length} published
       </p>
 
+      <CheckSubstackButton />
+
       {error && (
         <p className="mt-4 rounded-md border border-red-400 px-4 py-3 text-sm text-red-400">
           {error}
@@ -173,7 +205,7 @@ export default async function AdminInsightsPage({
         Manual fallback if the weekly automated submission is down.
       </p>
       <form action={createDraft} className="mt-4 rounded-lg border border-line bg-surface p-5">
-        <Fields />
+        <Fields defaultCategory="author" />
         <div className="mt-5">
           <button type="submit" className={primaryBtn}>
             Create draft

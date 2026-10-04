@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase-server";
 import { validateInsightInput } from "@/lib/insights";
+import { runInsightsDraftJob, type DraftJobSummary } from "@/lib/insightsDraftJob";
 
 // Server Actions bypass the proxy matcher, so each one re-checks auth
 // itself (same pattern as reviews/actions.ts).
@@ -88,4 +89,13 @@ export async function deleteInsight(formData: FormData) {
   const { error } = await supabase.from("insights").delete().eq("id", id);
   if (error) fail(error.message);
   refresh();
+}
+
+// Manual trigger for the weekly Substack -> draft job. Calls the shared job
+// function directly (not the cron URL), behind the same admin auth check.
+export async function checkSubstackNow(): Promise<DraftJobSummary> {
+  await requireAdmin();
+  const summary = await runInsightsDraftJob();
+  revalidatePath("/admin/insights");
+  return summary;
 }

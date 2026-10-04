@@ -1,6 +1,6 @@
 import Link from "next/link";
 import BookCover from "@/components/BookCover";
-import { getPublishedInsights, teaser } from "@/lib/insights";
+import { CATEGORY_LABELS, getPublishedInsights, teaser } from "@/lib/insights";
 import { pageMetadata } from "@/lib/metadata";
 
 export const revalidate = 300;
@@ -97,7 +97,7 @@ export default async function Home() {
               className="block rounded-lg border border-line bg-surface p-6 transition-colors hover:border-accent"
             >
               <p className="text-xs uppercase tracking-[0.15em] text-accent">
-                Latest Insight
+                Latest Insight &middot; {CATEGORY_LABELS[latestInsight.category]}
               </p>
               <h2 className="mt-2 font-serif text-xl">{latestInsight.title}</h2>
               <p className="mt-2 text-sm leading-6 text-muted">
