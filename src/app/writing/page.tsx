@@ -1,16 +1,21 @@
 import Image from "next/image";
+import ArchiveList from "@/components/ArchiveList";
+import SubstackEmbed from "@/components/SubstackEmbed";
+import { getHspArticles } from "@/lib/hspFeed";
 import { pageMetadata } from "@/lib/metadata";
 
 export const metadata = pageMetadata({
   title: "Writing — The Human Species Project | Kyler Wakefield",
   description:
-    "Ongoing writing from Kyler Wakefield via the Human Species Project on Substack.",
+    "Ongoing writing from Kyler Wakefield via the Human Species Project on Substack, with the full archive of articles, newest first.",
   path: "/writing",
 });
 
 const SUBSTACK_URL = "https://thehumanspeciesproject.substack.com";
 
-export default function WritingPage() {
+export default async function WritingPage() {
+  const articles = await getHspArticles();
+
   return (
     <div className="mx-auto max-w-5xl px-6 py-16">
       <div className="flex items-center gap-5">
@@ -35,8 +40,12 @@ export default function WritingPage() {
         Project is where the thread keeps getting pulled — ongoing dispatches,
         patterns, and questions, published on Substack.
       </p>
+      <p className="mt-4 max-w-2xl text-sm leading-7 text-muted">
+        New pieces go out on Substack first. Subscribe there to get them by
+        email, or browse everything below.
+      </p>
 
-      <div className="mt-10 flex flex-wrap gap-4">
+      <div className="mt-8 flex flex-wrap gap-4">
         <a
           href={SUBSTACK_URL}
           target="_blank"
@@ -55,18 +64,34 @@ export default function WritingPage() {
         </a>
       </div>
 
+      <div className="mt-10">
+        <SubstackEmbed />
+      </div>
+
       <div className="thread-rule my-16" />
 
-      <div className="max-w-2xl">
-        <h2 className="font-serif text-2xl">Why it&rsquo;s on Substack</h2>
-        <p className="mt-4 text-sm leading-7 text-muted">
-          Substack is where new writing goes out first, to people who&rsquo;ve
-          chosen to follow it directly. This page just points you there. If
-          you want a native archive built into this site later, that&rsquo;s
-          a straightforward addition — this link-out is the fast version to
-          get the site back up.
-        </p>
-      </div>
+      <section id="archive" className="scroll-mt-8">
+        <h2 className="font-serif text-3xl">The Full Archive</h2>
+        <div className="mt-8">
+          {articles.length === 0 ? (
+            <p className="text-sm text-muted">
+              Couldn&rsquo;t load articles right now — you can read them
+              directly on{" "}
+              <a
+                href="https://thehumanspeciesproject.substack.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-accent hover:underline"
+              >
+                Substack
+              </a>
+              .
+            </p>
+          ) : (
+            <ArchiveList articles={articles} />
+          )}
+        </div>
+      </section>
     </div>
   );
 }

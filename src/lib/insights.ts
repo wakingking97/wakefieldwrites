@@ -18,28 +18,40 @@ export type Insight = {
   category: InsightCategory;
   status: "draft" | "published";
   published_at: string | null;
+  source_published_at: string | null;
 };
 
+// Date to show and sort by: for Substack-based posts, when the original
+// piece went out; otherwise (or if unknown) when this post was published.
+export function displayDate(i: Pick<Insight, "source_published_at" | "published_at">): string | null {
+  return i.source_published_at ?? i.published_at;
+}
+
 export const INSIGHT_COLUMNS =
-  "id, created_at, slug, title, hook_content, keywords, meta_description, substack_url, substack_title, category, status, published_at";
+  "id, created_at, slug, title, hook_content, keywords, meta_description, substack_url, substack_title, category, status, published_at, source_published_at";
 
 // Public reads use the anon client. RLS already limits anon to
 // status = 'published'; the explicit .eq() is a second guard so a policy
 // mistake can never leak a draft through these pages.
 export async function getPublishedInsights(limit?: number): Promise<Insight[]> {
   if (!supabase) return [];
-  let query = supabase
+  const query = supabase
     .from("insights")
     .select(INSIGHT_COLUMNS)
     .eq("status", "published")
     .order("published_at", { ascending: false });
-  if (limit) query = query.limit(limit);
   const { data, error } = await query;
   if (error) {
     console.error("getPublishedInsights failed", error);
     return [];
   }
-  return (data ?? []) as Insight[];
+  // Sort by coalesce(source_published_at, published_at) desc, in JS: the
+  // table is tiny and PostgREST cannot order by an expression.
+  const sorted = ((data ?? []) as Insight[]).sort(
+    (a, b) =>
+      new Date(displayDate(b) ?? 0).getTime() - new Date(displayDate(a) ?? 0).getTime(),
+  );
+  return limit ? sorted.slice(0, limit) : sorted;
 }
 
 export async function getPublishedInsight(slug: string): Promise<Insight | null> {
@@ -103,6 +115,8 @@ export type InsightInput = {
   substack_url: string | null;
   substack_title: string | null;
   category: InsightCategory;
+  // Only present when supplied; undefined keys are left untouched on update.
+  source_published_at?: string;
 };
 
 // Shared by the admin form, the machine endpoint and the weekly job so all
@@ -140,8 +154,16 @@ export function validateInsightInput(
     substackUrl = url.toString();
   }
 
+  let sourcePublishedAt: string | undefined;
+  if (str("source_published_at")) {
+    const d = new Date(str("source_published_at"));
+    if (Number.isNaN(d.getTime())) return { error: "source_published_at must be a valid date" };
+    sourcePublishedAt = d.toISOString();
+  }
+
   return {
     value: {
+      ...(sourcePublishedAt ? { source_published_at: sourcePublishedAt } : {}),
       slug,
       title: str("title"),
       hook_content: str("hook_content").replace(/\r\n/g, "\n"),

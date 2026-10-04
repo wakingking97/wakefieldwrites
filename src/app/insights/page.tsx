@@ -1,12 +1,12 @@
 import Link from "next/link";
 import InsightsGrid from "@/components/InsightsGrid";
-import { getPublishedInsights } from "@/lib/insights";
+import { displayDate, getPublishedInsights } from "@/lib/insights";
 import { pageMetadata } from "@/lib/metadata";
 
 export const revalidate = 300;
 
 export const metadata = pageMetadata({
-  title: "Insights — Kyler Wakefield",
+  title: "News — Kyler Wakefield",
   description:
     "News and short reads from Kyler Wakefield: angles on each new Human Species Project piece, updates on the book Pulling the Thread, and notes on the work behind it.",
   path: "/insights",
@@ -17,7 +17,7 @@ export default async function InsightsPage() {
 
   return (
     <div className="mx-auto max-w-5xl px-6 py-16">
-      <p className="text-sm uppercase tracking-[0.2em] text-accent">Insights</p>
+      <p className="text-sm uppercase tracking-[0.2em] text-accent">News</p>
       <h1 className="mt-4 font-serif text-4xl leading-tight sm:text-5xl">
         News &amp; Short Reads
       </h1>
@@ -36,7 +36,7 @@ export default async function InsightsPage() {
           <p className="text-sm text-muted">
             Nothing here yet — new posts are added regularly. In the meantime,
             browse the{" "}
-            <Link href="/archive" className="text-accent hover:underline">
+            <Link href="/writing#archive" className="text-accent hover:underline">
               archive
             </Link>
             .
@@ -49,7 +49,9 @@ export default async function InsightsPage() {
               title: i.title,
               meta_description: i.meta_description,
               category: i.category,
-              published_at: i.published_at,
+              date: displayDate(i),
+              substack_title: i.substack_title,
+              substack_url: i.substack_url,
             }))}
           />
         )}

@@ -35,12 +35,10 @@ const NAV_LINKS = [
   { href: "/", label: "Home" },
   { href: "/book", label: "The Book" },
   { href: "/sample", label: "Read a Sample" },
-  { href: "/reviews", label: "Reviews" },
   { href: "/writing", label: "Writing" },
-  { href: "/archive", label: "Archive" },
-  { href: "/insights", label: "Insights" },
+  { href: "/insights", label: "News" },
+  { href: "/reviews", label: "Reviews" },
   { href: "/about", label: "About" },
-  { href: "/projects", label: "Projects" },
 ];
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
@@ -104,6 +102,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
               </Link>
               <Link href="/privacy" className="transition-colors hover:text-foreground">
                 Privacy Policy
+              </Link>
+              <Link href="/projects" className="transition-colors hover:text-foreground">
+                Projects
               </Link>
             </div>
           </div>

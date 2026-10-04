@@ -31,8 +31,8 @@ export default function AboutPage() {
         <div className="min-w-0 space-y-6 text-base leading-8 text-muted">
           <p>
             I work weekdays on my family&rsquo;s ranch, and the night shift
-            on weekends at a hotel in Santa Rosa, New Mexico. I am two years
-            sober.
+            on weekends at a hotel in Santa Rosa, New Mexico. I&rsquo;ve been
+            sober since May 8, 2024.
           </p>
           <p>
             The years leading up to this book were the roughest of my life
@@ -66,8 +66,8 @@ export default function AboutPage() {
             left to protect them from it.
           </p>
           <p>
-            In January of 2025 I went back to school. I earned my ASBA
-            degree in eleven months, graduating with honors and an
+            In January of 2025 I went back to school. I earned my Associate of Science
+            in Business Administration in eleven months, graduating with honors and an
             invitation to the National Society of Leadership and Success.
           </p>
           <p>

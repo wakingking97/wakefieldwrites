@@ -195,6 +195,7 @@ export async function runInsightsDraftJob(): Promise<DraftJobSummary> {
       const validated = validateInsightInput({
         ...draft,
         category: "substack",
+        source_published_at: post.publishedAt,
         substack_url: post.url, // from Substack, never from the model
         substack_title: post.title,
       });

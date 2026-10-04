@@ -5,6 +5,7 @@ import {
   CATEGORY_FILTER_LABELS,
   CATEGORY_LABELS,
   INSIGHT_COLUMNS,
+  displayDate,
   type Insight,
   type InsightCategory,
 } from "@/lib/insights";
@@ -122,6 +123,10 @@ function InsightCard({ insight }: { insight: Insight }) {
           {published ? "Published" : "Draft"} &middot; {CATEGORY_LABELS[insight.category]}
         </span>
         <span className="text-xs text-muted">
+          {insight.source_published_at && (
+            <>Source post: {new Date(insight.source_published_at).toLocaleDateString()} &middot; </>
+          )}
+          {published ? "Published" : "Created"}{" "}
           {new Date(insight.published_at ?? insight.created_at).toLocaleDateString()}
         </span>
       </div>
@@ -166,7 +171,7 @@ export default async function AdminInsightsPage({
     .filter((i) => i.status === "published")
     .sort(
       (a, b) =>
-        new Date(b.published_at ?? 0).getTime() - new Date(a.published_at ?? 0).getTime(),
+        new Date(displayDate(b) ?? 0).getTime() - new Date(displayDate(a) ?? 0).getTime(),
     );
 
   return (

@@ -7,6 +7,7 @@ export default function ReviewForm() {
   const [name, setName] = useState("");
   const [role, setRole] = useState("");
   const [reviewText, setReviewText] = useState("");
+  const [honeypot, setHoneypot] = useState("");
   const [status, setStatus] = useState<"idle" | "submitting" | "done" | "error">(
     "idle",
   );
@@ -14,6 +15,13 @@ export default function ReviewForm() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!supabase) return;
+
+    // Honeypot: real visitors never see or fill this field; bots do.
+    // Pretend it worked, insert nothing.
+    if (honeypot !== "") {
+      setStatus("done");
+      return;
+    }
 
     setStatus("submitting");
 
@@ -55,6 +63,18 @@ export default function ReviewForm() {
 
   return (
     <form onSubmit={handleSubmit} className="mt-6 max-w-xl space-y-5">
+      <div aria-hidden="true" className="absolute -left-[9999px] h-0 w-0 overflow-hidden">
+        <label htmlFor="review-website">Website (leave blank)</label>
+        <input
+          id="review-website"
+          type="text"
+          name="website"
+          tabIndex={-1}
+          autoComplete="off"
+          value={honeypot}
+          onChange={(e) => setHoneypot(e.target.value)}
+        />
+      </div>
       <div>
         <label
           htmlFor="review-name"

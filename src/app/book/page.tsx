@@ -60,7 +60,7 @@ export default function BookPage() {
             </p>
             <p className="text-sm text-foreground">
               &mdash; Kyler Wakefield, from a hotel front desk in Santa Rosa,
-              New Mexico, where much of this book was written live.
+              New Mexico, where much of this book was written.
             </p>
           </div>
         </div>

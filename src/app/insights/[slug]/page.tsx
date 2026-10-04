@@ -2,7 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import InsightBody from "@/components/InsightBody";
-import { CATEGORY_LABELS, getPublishedInsight } from "@/lib/insights";
+import { CATEGORY_LABELS, displayDate, getPublishedInsight } from "@/lib/insights";
 import { pageMetadata } from "@/lib/metadata";
 
 export const revalidate = 300;
@@ -29,7 +29,7 @@ export default async function InsightPage({ params }: Props) {
   return (
     <article className="mx-auto max-w-3xl px-6 py-16">
       <Link href="/insights" className="text-sm text-accent hover:underline">
-        &larr; All insights
+        &larr; All news
       </Link>
       <p className="mt-6 text-xs uppercase tracking-[0.15em] text-accent">
         {CATEGORY_LABELS[insight.category]}
@@ -37,9 +37,27 @@ export default async function InsightPage({ params }: Props) {
       <h1 className="mt-3 font-serif text-4xl leading-tight sm:text-5xl">
         {insight.title}
       </h1>
-      {insight.published_at && (
+      {displayDate(insight) && (
         <p className="mt-4 text-sm text-muted">
-          {new Date(insight.published_at).toLocaleDateString("en-US", {
+          {insight.category === "substack" && insight.substack_title ? (
+            <>
+              Based on{" "}
+              {insight.substack_url ? (
+                <a
+                  href={insight.substack_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-foreground underline decoration-line underline-offset-2 hover:text-accent"
+                >
+                  &ldquo;{insight.substack_title}&rdquo;
+                </a>
+              ) : (
+                <>&ldquo;{insight.substack_title}&rdquo;</>
+              )}{" "}
+              &middot;{" "}
+            </>
+          ) : null}
+          {new Date(displayDate(insight)!).toLocaleDateString("en-US", {
             month: "long",
             day: "numeric",
             year: "numeric",

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import BookCover from "@/components/BookCover";
+import SubstackEmbed from "@/components/SubstackEmbed";
 import { CATEGORY_LABELS, getPublishedInsights, teaser } from "@/lib/insights";
 import { pageMetadata } from "@/lib/metadata";
 
@@ -88,6 +89,10 @@ export default async function Home() {
         </div>
       </section>
 
+      <section className="mx-auto max-w-5xl px-6 pb-16">
+        <SubstackEmbed heading="Follow The Human Species Project" />
+      </section>
+
       {latestInsight && (
         <>
           <div className="thread-rule mx-auto max-w-5xl" />
@@ -97,7 +102,7 @@ export default async function Home() {
               className="block rounded-lg border border-line bg-surface p-6 transition-colors hover:border-accent"
             >
               <p className="text-xs uppercase tracking-[0.15em] text-accent">
-                Latest Insight &middot; {CATEGORY_LABELS[latestInsight.category]}
+                Latest News &middot; {CATEGORY_LABELS[latestInsight.category]}
               </p>
               <h2 className="mt-2 font-serif text-xl">{latestInsight.title}</h2>
               <p className="mt-2 text-sm leading-6 text-muted">
