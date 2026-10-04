@@ -16,7 +16,7 @@ export default function PrivacyPage() {
       <h1 className="mt-4 font-serif text-4xl leading-tight sm:text-5xl">
         Privacy Policy
       </h1>
-      <p className="mt-4 text-sm text-muted">Last updated August 28, 2026.</p>
+      <p className="mt-4 text-sm text-muted">Last updated October 4, 2026.</p>
 
       <div className="mt-10 space-y-8 text-base leading-8 text-muted">
         <div>
@@ -53,6 +53,18 @@ export default function PrivacyPage() {
             are processed entirely by PayPal, on PayPal&rsquo;s own systems,
             under PayPal&rsquo;s own privacy policy. We never see or store
             your payment details.
+          </p>
+        </div>
+
+        <div>
+          <h2 className="font-serif text-xl text-foreground">
+            Email signup
+          </h2>
+          <p className="mt-3">
+            The email signup box on the Home and Writing pages is provided by
+            Substack. If you subscribe, your email address goes to Substack
+            under its own privacy policy; this site does not receive or store
+            it.
           </p>
         </div>
 

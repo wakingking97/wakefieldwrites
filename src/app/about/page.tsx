@@ -51,7 +51,7 @@ export default function AboutPage() {
             last time I woke up in a hospital. That was the moment. What
             followed was a year moving between rehab facilities — fighting
             for the version of myself that was still in there somewhere. On
-            May 8, 2024, I got sober. I have stayed sober since.
+            May 8, 2024, I got sober.
           </p>
           <p>
             When I came out the other side the world looked different. Not

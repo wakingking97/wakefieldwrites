@@ -394,6 +394,8 @@ Built the 5y prompt. Committed locally; **Kyler runs `git push origin main` hims
 - **Part 7 (book details): skipped** — the prompt's details section was empty.
 - Verified: build + lint clean; mobile screenshots of home, /writing, /news, /about, /reviews.
 
+**Follow-up edits (Kyler-approved), committed with the next commit:** `/privacy` has a new "Email signup" section (Substack embed: emails go to Substack, the site never stores them), and "Last updated" is now October 4, 2026. `/about`: cut the duplicate "I have stayed sober since." The opening "I've been sober since May 8, 2024." and the later "On May 8, 2024, I got sober." both stay. **Note for the PayPal work:** once the webhook goes live it stores buyer name, email and shipping address in Supabase, so the Privacy page's "That's the only information this site collects directly" line has to be updated at the same time. Added to the PayPal prompt.
+
 ## 6. Open items / needs from Kyler
 
 - [x] ~~Real book description/back-cover copy~~ — using manuscript's own "About This Book" text, confirmed
