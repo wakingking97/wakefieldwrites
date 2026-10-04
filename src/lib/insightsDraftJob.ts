@@ -5,7 +5,7 @@ import { getPostText, getRecentPosts, normalizeUrl, type SubstackPost } from "@/
 import { createServiceClient, isSupabaseServiceConfigured } from "@/lib/supabase-service";
 
 // Shared by the cron route and the admin "Check Substack now" button, so
-// both run exactly the same logic. Server-only (reads ANTHROPIC_API_KEY and
+// both run exactly the same logic. Server-only (reads ANTHROPIC_API_KEY2 and
 // uses the service-role Supabase client).
 
 // Current Sonnet (Sonnet 5.5). Web search type from Anthropic's server-tool
@@ -142,7 +142,7 @@ export async function runInsightsDraftJob(): Promise<DraftJobSummary> {
   };
 
   if (!isSupabaseServiceConfigured) return summarize({ ok: false, error: "Supabase service role not configured" });
-  if (!process.env.ANTHROPIC_API_KEY) return summarize({ ok: false, error: "ANTHROPIC_API_KEY not configured" });
+  if (!process.env.ANTHROPIC_API_KEY2) return summarize({ ok: false, error: "ANTHROPIC_API_KEY2 not configured" });
 
   let posts: SubstackPost[];
   try {
@@ -153,7 +153,8 @@ export async function runInsightsDraftJob(): Promise<DraftJobSummary> {
   }
 
   const supabase = createServiceClient();
-  const client = new Anthropic();
+  // Explicit key: the SDK would otherwise read ANTHROPIC_API_KEY, which is Korale's key.
+  const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY2 });
 
   const existing = async () => {
     const { data, error } = await supabase.from("insights").select("substack_url").not("substack_url", "is", null);

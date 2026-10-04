@@ -366,6 +366,8 @@ Built per the 5v scope. Committed locally; **Kyler must run `git push origin mai
 
 **Cleanup:** `insights-drafts/` (the original first-draft JSON) deleted, since the example now lives in `insightsPrompt.ts`.
 
+**Deployed 2026-10-04:** pushed (`4350462` on top of `a8c580c`). A Vercel "Redeploy" was then accidentally run on the older `dac7cbd` deployment, which rolled production back (no "Check Substack now" button). Fixed by redeploying `4350462`. Verified live: `/insights` heading "News & Short Reads", `/api/cron/insights-draft` returns 401 without the secret. **Lesson: when redeploying for env vars, redeploy the newest row (top commit), not an older one.** Anthropic key + `CRON_SECRET` added by Kyler; first "Check Substack now" run still to be reported.
+
 ## 6. Open items / needs from Kyler
 
 - [x] ~~Real book description/back-cover copy~~ — using manuscript's own "About This Book" text, confirmed
