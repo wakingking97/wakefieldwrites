@@ -2,6 +2,12 @@ import Image from "next/image";
 import Link from "next/link";
 import BookCover from "@/components/BookCover";
 import PayPalButton from "@/components/PayPalButton";
+import {
+  BOOK_PAGES,
+  KINDLE_PRICE,
+  KINDLE_UNLIMITED_NOTE,
+  KINDLE_URL,
+} from "@/lib/book";
 import { pageMetadata } from "@/lib/metadata";
 
 export const metadata = pageMetadata({
@@ -72,12 +78,21 @@ export default function BookPage() {
             </p>
             <div className="mt-4 flex flex-wrap gap-3">
               <a
+                href={KINDLE_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-full rounded-full bg-accent px-5 py-3 text-center text-sm font-medium text-black transition-opacity hover:opacity-90"
+              >
+                Kindle &mdash; {KINDLE_PRICE}
+                <span className="font-normal"> &middot; {KINDLE_UNLIMITED_NOTE}</span>
+              </a>
+              <a
                 href="https://www.amazon.com/dp/B0HFVXC1JC"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex-1 rounded-full border border-line px-5 py-3 text-center text-sm font-medium text-foreground transition-colors hover:border-accent"
               >
-                Amazon
+                Amazon (print)
               </a>
               <a
                 href="https://www.barnesandnoble.com/w/pulling-the-thread-kyler-wakefield/1150213186?ean=9798256364335"
@@ -88,6 +103,9 @@ export default function BookPage() {
                 Barnes &amp; Noble
               </a>
             </div>
+            <p className="mt-4 text-xs text-muted">
+              Hardcover &middot; Paperback &middot; Kindle &middot; {BOOK_PAGES} pages.
+            </p>
           </div>
 
           <div className="mt-6 rounded-lg border border-line bg-surface p-8">

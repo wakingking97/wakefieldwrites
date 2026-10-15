@@ -61,13 +61,6 @@ export default function ProjectsPage() {
         </Link>
       </div>
 
-      <p className="mt-10 text-xs text-muted">
-        {/* PLACEHOLDER: add more project cards here as you want to feature
-        other work. */}
-        More projects coming. This page is built to grow — new cards can be
-        added here anytime.
-      </p>
-
       <div className="thread-rule my-16" />
 
       <h2 className="font-serif text-2xl">Other Projects</h2>

@@ -396,6 +396,43 @@ Built the 5y prompt. Committed locally; **Kyler runs `git push origin main` hims
 
 **Follow-up edits (Kyler-approved), committed with the next commit:** `/privacy` has a new "Email signup" section (Substack embed: emails go to Substack, the site never stores them), and "Last updated" is now October 4, 2026. `/about`: cut the duplicate "I have stayed sober since." The opening "I've been sober since May 8, 2024." and the later "On May 8, 2024, I got sober." both stay. **Note for the PayPal work:** once the webhook goes live it stores buyer name, email and shipping address in Supabase, so the Privacy page's "That's the only information this site collects directly" line has to be updated at the same time. Added to the PayPal prompt.
 
+## 5aa. First-time-visitor walkthrough of the live site — 2026-10-15
+
+Walked every public page as a new visitor: Chrome for home + /book until the extension disconnected, then server-rendered text for the rest. **Gotcha:** plain WebFetch of wakefieldwrites.com URLs returned stale proxy-cached copies (old About/Reviews/News). Adding a `?nocache=` query string returned the true live pages. Always cache-bust when verifying through WebFetch.
+
+**Live and correct (1847055):** 7-item nav; Projects in the footer; `/archive` lands on `/writing` with all 20 real posts (newest is Oct 11, "The Sentence We Hear Every Election"); News shows "Based on …" with Oct 4 / Sep 27 / Sep 13; Margaret's "(via Reedsy)" attribution; About shows the full degree name and "I've been sober since May 8, 2024"; Contact email; all footer links (Substack, Amazon author page, LinkedIn, HSP Facebook); Amazon `dp/B0HFVXC1JC` and the B&N listing on /book. Signed-copy checkout renders with three options: **Paperback $25, Hardcover Case Laminate $35, Hardcover w/Paper Sleeve $40** (added to the PayPal prompt as item 10).
+
+**Not live:** `6437ba2` (Privacy "Email signup" section + duplicate sobriety line cut) is still unpushed. Live About still has "I have stayed sober since." and Privacy is still dated Aug 28.
+
+**Found:**
+- **Oct 11 post isn't on News — RESOLVED, the cron works.** /admin/insights shows a draft created 10/12/2026 from the Oct 11 post ("The Most Important Election of Our Lifetime": The Sentence We Hear Every Election). The first scheduled run fired on its own. It's waiting for Kyler to review and publish. Small fix spotted: the meta description says "A 1840 newspaper", which should be "An 1840".
+- **Another public build note on /projects:** "More projects coming. This page is built to grow — new cards can be added here anytime."
+- **Homepage:** no review/social proof and no price. Margaret's line only appears on /reviews. The Substack embed is a white box left-aligned in a wide dark card. The Latest News card shows no date.
+- **/book:** no shipping cost shown; the PayPal widget header says "$25.00 USD" while the hardcovers cost $35/$40; the widget copy is awkward ("Support Kyler, by purchasing a variation of his book…") and is editable in PayPal's button settings; nothing explains laminate vs paper sleeve; book details (pages/ISBN) still missing.
+- `/sample` text loads only with JavaScript, so search engines and link previews see "Loading the sample…".
+
+## 5ab. Homepage + polish — prompt sent — 2026-10-15
+
+Kyler published the Oct 11 draft (the weekly loop works end to end) and pushed `6437ba2`. From the 5aa walkthrough he approved: removing the /projects build note; **Margaret's editor quote front and center on the homepage**; **leading with the Kindle ebook**; a themed subscribe block replacing the white Substack iframe (no unofficial Substack endpoints, no emails stored); and a date on the homepage news card. He confirmed the PayPal widget price updates with the chosen format, so there's no change there. He's fine showing the page count.
+
+**Amazon facts (checked live 2026-10-15):** Kindle `B0H1G4SSJP` $2.99 / free with Kindle Unlimited; Paperback `B0HFVRZQD6` $12.99; Hardcover `B0HFVXC1JC` $23.89 (the site's existing "Amazon" link goes to the hardcover); 307 pages; published June 4, 2026; hardcover ISBN-13 979-8193801153. The Kindle price goes in one constant so a KDP reprice is a one-line change.
+
+Prompt: `prompts/homepage-and-polish.md`. **Built — see 5ac.** Still open from 5aa: shipping cost isn't shown on /book, and nothing explains "Case Laminate" vs "Paper Sleeve".
+
+## 5ac. Homepage + polish — BUILT, committed locally — 2026-10-15
+
+Built per `prompts/homepage-and-polish.md`. Build and lint clean. **Not yet pushed.**
+
+- **/projects:** build note removed. Nothing else changed.
+- **Homepage hero:** primary button "Read it on Kindle — $2.99" → `amazon.com/dp/B0H1G4SSJP`, with "Free with Kindle Unlimited." under it; secondary "Print & signed copies" → /book; "Read the Writing →" kept as a text link. Margaret Manos's quote sits directly under the hero, serif italic with a gold rule. The quote and attribution are constants in `src/lib/book.ts` (not read from the reviews table).
+- **/book:** Kindle button first in the shop box (full width, gold, with the Kindle Unlimited note); existing button relabeled "Amazon (print)"; details line "Hardcover · Paperback · Kindle · 307 pages." PayPal widget, 3D book, /sample untouched.
+- **Price constant:** `src/lib/book.ts` (`KINDLE_PRICE`, `KINDLE_UNLIMITED_NOTE`, `KINDLE_URL`, `BOOK_PAGES`). Reprice in KDP → edit there.
+- **Subscribe:** `SubstackEmbed` deleted; new `SubscribeBlock` (themed card + "Subscribe free" button → `thehumanspeciesproject.substack.com/subscribe`, new tab) on the homepage and /writing. Substack has no documented email-prefill URL parameter, so there is no email input; the site never collects emails.
+- **Privacy:** "Email signup" section reworded; page date now Oct 15, 2026.
+- **Homepage news card:** shows the date (`source_published_at` for Substack posts, else `published_at`, "October 11, 2026" format).
+
+Reminder: Kyler pushes with `git push origin main` himself; never Redeploy an older deployment in Vercel.
+
 ## 6. Open items / needs from Kyler
 
 - [x] ~~Real book description/back-cover copy~~ — using manuscript's own "About This Book" text, confirmed

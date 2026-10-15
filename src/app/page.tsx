@@ -1,7 +1,14 @@
 import Link from "next/link";
 import BookCover from "@/components/BookCover";
-import SubstackEmbed from "@/components/SubstackEmbed";
-import { CATEGORY_LABELS, getPublishedInsights, teaser } from "@/lib/insights";
+import SubscribeBlock from "@/components/SubscribeBlock";
+import {
+  EDITOR_ATTRIBUTION,
+  EDITOR_QUOTE,
+  KINDLE_PRICE,
+  KINDLE_UNLIMITED_NOTE,
+  KINDLE_URL,
+} from "@/lib/book";
+import { CATEGORY_LABELS, displayDate, getPublishedInsights, teaser } from "@/lib/insights";
 import { pageMetadata } from "@/lib/metadata";
 
 export const revalidate = 300;
@@ -37,18 +44,31 @@ export default async function Home() {
             , is where that argument is laid out in full: sourced,
             documented, and built so you can see it for yourself.
           </p>
-          <div className="mt-10 flex flex-wrap gap-4">
+          <div className="mt-10 flex flex-wrap items-start gap-x-4 gap-y-4">
+            <div>
+              <a
+                href={KINDLE_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-block rounded-full bg-accent px-6 py-3 text-sm font-medium text-black transition-opacity hover:opacity-90"
+              >
+                Read it on Kindle &mdash; {KINDLE_PRICE}
+              </a>
+              <p className="mt-2 pl-2 text-xs text-muted">
+                {KINDLE_UNLIMITED_NOTE}.
+              </p>
+            </div>
             <Link
               href="/book"
-              className="rounded-full bg-accent px-6 py-3 text-sm font-medium text-black transition-opacity hover:opacity-90"
+              className="rounded-full border border-line px-6 py-3 text-sm font-medium text-foreground transition-colors hover:border-accent"
             >
-              Get the Book
+              Print &amp; signed copies
             </Link>
             <Link
               href="/writing"
-              className="rounded-full border border-line px-6 py-3 text-sm font-medium text-foreground transition-colors hover:border-accent"
+              className="py-3 text-sm text-muted transition-colors hover:text-accent"
             >
-              Read the Writing
+              Read the Writing &rarr;
             </Link>
           </div>
         </div>
@@ -56,6 +76,17 @@ export default async function Home() {
         <Link href="/book" className="block transition-opacity hover:opacity-90">
           <BookCover priority />
         </Link>
+      </section>
+
+      <section className="mx-auto max-w-5xl px-6 pb-16">
+        <blockquote className="border-l-2 border-accent pl-6">
+          <p className="font-serif text-xl italic leading-snug text-foreground sm:text-2xl">
+            &ldquo;{EDITOR_QUOTE}&rdquo;
+          </p>
+          <footer className="mt-3 text-sm text-muted">
+            &mdash; {EDITOR_ATTRIBUTION}
+          </footer>
+        </blockquote>
       </section>
 
       <div className="thread-rule mx-auto max-w-5xl" />
@@ -90,7 +121,7 @@ export default async function Home() {
       </section>
 
       <section className="mx-auto max-w-5xl px-6 pb-16">
-        <SubstackEmbed heading="Follow The Human Species Project" />
+        <SubscribeBlock heading="Follow The Human Species Project" />
       </section>
 
       {latestInsight && (
@@ -103,6 +134,16 @@ export default async function Home() {
             >
               <p className="text-xs uppercase tracking-[0.15em] text-accent">
                 Latest News &middot; {CATEGORY_LABELS[latestInsight.category]}
+                {displayDate(latestInsight) && (
+                  <span className="text-muted">
+                    {" "}
+                    &middot;{" "}
+                    {new Date(displayDate(latestInsight)!).toLocaleDateString(
+                      "en-US",
+                      { month: "long", day: "numeric", year: "numeric" },
+                    )}
+                  </span>
+                )}
               </p>
               <h2 className="mt-2 font-serif text-xl">{latestInsight.title}</h2>
               <p className="mt-2 text-sm leading-6 text-muted">

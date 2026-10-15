@@ -16,7 +16,7 @@ export default function PrivacyPage() {
       <h1 className="mt-4 font-serif text-4xl leading-tight sm:text-5xl">
         Privacy Policy
       </h1>
-      <p className="mt-4 text-sm text-muted">Last updated October 4, 2026.</p>
+      <p className="mt-4 text-sm text-muted">Last updated October 15, 2026.</p>
 
       <div className="mt-10 space-y-8 text-base leading-8 text-muted">
         <div>
@@ -61,10 +61,10 @@ export default function PrivacyPage() {
             Email signup
           </h2>
           <p className="mt-3">
-            The email signup box on the Home and Writing pages is provided by
-            Substack. If you subscribe, your email address goes to Substack
-            under its own privacy policy; this site does not receive or store
-            it.
+            The &ldquo;Subscribe free&rdquo; buttons on the Home and Writing
+            pages take you to Substack. Subscribing happens on
+            Substack&rsquo;s own site, under Substack&rsquo;s privacy policy.
+            This site does not receive or store email addresses.
           </p>
         </div>
 

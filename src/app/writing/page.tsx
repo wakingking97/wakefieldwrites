@@ -1,6 +1,6 @@
 import Image from "next/image";
 import ArchiveList from "@/components/ArchiveList";
-import SubstackEmbed from "@/components/SubstackEmbed";
+import SubscribeBlock from "@/components/SubscribeBlock";
 import { getHspArticles } from "@/lib/hspFeed";
 import { pageMetadata } from "@/lib/metadata";
 
@@ -65,7 +65,7 @@ export default async function WritingPage() {
       </div>
 
       <div className="mt-10">
-        <SubstackEmbed />
+        <SubscribeBlock />
       </div>
 
       <div className="thread-rule my-16" />
