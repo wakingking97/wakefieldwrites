@@ -487,6 +487,8 @@ Built per `prompts/chatbot-fixes.md` (Kyler's requests after testing the live ch
 
 Reminder: Kyler pushes with `git push origin main` himself; never Redeploy an older deployment in Vercel.
 
+**Real-model checks passed 2026-10-26** (Kyler, live, after pushing `a0b818f`): the chat starts closed and the gold speech-bubble "?" launcher shows bottom-right. "Tell me about the book and its author" gave a compact answer (~110 words for a two-part question) with labeled links. "What do you think of Kyler?" gave no opinion and no addiction detail, only an About-page link. The politics question was declined cleanly. Small nit for later: the bot says "a rancher **from** Santa Rosa" (Kyler grew up in Duluth; the site says he works/lives in Santa Rosa). Changing the intro line in `src/features/chatbot/config.ts` to "based in Santa Rosa" would fix it.
+
 ## 6. Open items / needs from Kyler
 
 - [x] ~~Real book description/back-cover copy~~ — using manuscript's own "About This Book" text, confirmed
