@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Analytics } from "@vercel/analytics/next";
+import ChatbotMount from "@/features/chatbot/ChatbotMount";
 import "./globals.css";
 import { pageMetadata, SITE_URL } from "@/lib/metadata";
 import type { Metadata } from "next";
@@ -109,6 +110,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
             </div>
           </div>
         </footer>
+        <ChatbotMount />
         <Analytics />
       </body>
     </html>

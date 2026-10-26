@@ -16,7 +16,7 @@ export default function PrivacyPage() {
       <h1 className="mt-4 font-serif text-4xl leading-tight sm:text-5xl">
         Privacy Policy
       </h1>
-      <p className="mt-4 text-sm text-muted">Last updated October 15, 2026.</p>
+      <p className="mt-4 text-sm text-muted">Last updated October 26, 2026.</p>
 
       <div className="mt-10 space-y-8 text-base leading-8 text-muted">
         <div>
@@ -33,9 +33,8 @@ export default function PrivacyPage() {
             reviewed before it&rsquo;s published publicly on this site.
           </p>
           <p className="mt-3">
-            That&rsquo;s the only information this site collects directly.
-            Browsing the rest of the site doesn&rsquo;t submit any of your
-            information to us.
+            Apart from that and the site chat described below, browsing the
+            site doesn&rsquo;t submit any of your information to us.
           </p>
         </div>
 
@@ -65,6 +64,31 @@ export default function PrivacyPage() {
             pages take you to Substack. Subscribing happens on
             Substack&rsquo;s own site, under Substack&rsquo;s privacy policy.
             This site does not receive or store email addresses.
+          </p>
+        </div>
+
+        <div>
+          <h2 className="font-serif text-xl text-foreground">
+            Site chat
+          </h2>
+          <p className="mt-3">
+            The chat assistant on this site is AI, not Kyler, and its answers
+            can be wrong. When you send a message, it&rsquo;s sent to
+            Anthropic, the company that makes the AI, to generate a reply.
+          </p>
+          <p className="mt-3">
+            Conversations are saved in this site&rsquo;s database for up to 90
+            days to improve answers, then deleted. Your IP address is stored
+            only as a one-way hash, used for rate limiting; the address itself
+            is never saved. Please don&rsquo;t share personal or sensitive
+            information in the chat.
+          </p>
+          <p className="mt-3">
+            To have a conversation deleted, email Kyler at{" "}
+            <a href="mailto:kyler@wakefieldwrites.com" className="text-accent hover:underline">
+              kyler@wakefieldwrites.com
+            </a>
+            .
           </p>
         </div>
 

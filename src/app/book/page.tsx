@@ -17,6 +17,8 @@ export const metadata = pageMetadata({
   path: "/book",
 });
 
+// The site chat assistant reads a plain-text copy of this page's copy
+// (BOOK_DESCRIPTION in src/lib/book.ts) -- update it too when this text changes.
 export default function BookPage() {
   return (
     <div className="mx-auto max-w-5xl px-6 py-16">

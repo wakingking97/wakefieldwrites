@@ -9,6 +9,8 @@ export const metadata = pageMetadata({
   image: "/images/author-photo.jpg",
 });
 
+// The site chat assistant reads a plain-text copy of this page's copy
+// (ABOUT_BIO in src/lib/aboutBio.ts) -- update it too when this text changes.
 export default function AboutPage() {
   return (
     <div className="mx-auto max-w-5xl px-6 py-16">

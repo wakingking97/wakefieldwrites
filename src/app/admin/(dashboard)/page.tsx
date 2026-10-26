@@ -22,6 +22,10 @@ const CARDS = [
   },
 ];
 
+function sevenDaysAgoIso() {
+  return new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
+}
+
 function thirtyDaysAgoIso() {
   return new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString();
 }
@@ -30,8 +34,14 @@ export default async function AdminHomePage() {
   const supabase = await createClient();
   const cutoff = thirtyDaysAgoIso();
 
-  const [{ count: pendingCount }, { count: recentOrderCount }, { data: inventory }] =
-    await Promise.all([
+  const weekAgo = sevenDaysAgoIso();
+
+  const [
+    { count: pendingCount },
+    { count: recentOrderCount },
+    { data: inventory },
+    { count: weeklyChatCount },
+  ] = await Promise.all([
       supabase
         .from("reviews")
         .select("id", { count: "exact", head: true })
@@ -41,6 +51,10 @@ export default async function AdminHomePage() {
         .select("id", { count: "exact", head: true })
         .gte("created_at", cutoff),
       supabase.from("inventory").select("format, signed_copies_on_hand"),
+      supabase
+        .from("chat_sessions")
+        .select("id", { count: "exact", head: true })
+        .gte("created_at", weekAgo),
     ]);
 
   const paperback = inventory?.find((i) => i.format === "paperback");
@@ -56,6 +70,15 @@ export default async function AdminHomePage() {
     {
       label: "Hardcover on hand",
       value: hardcover?.signed_copies_on_hand ?? "—",
+    },
+  ];
+
+  const cards = [
+    ...CARDS,
+    {
+      href: "/admin/chats",
+      label: "Chats",
+      description: `${weeklyChatCount ?? "—"} chat${weeklyChatCount === 1 ? "" : "s"} this week.`,
     },
   ];
 
@@ -76,7 +99,7 @@ export default async function AdminHomePage() {
       </div>
 
       <div className="mt-10 grid gap-4 sm:grid-cols-3">
-        {CARDS.map((card) => (
+        {cards.map((card) => (
           <Link
             key={card.href}
             href={card.href}
