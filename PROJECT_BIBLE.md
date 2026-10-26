@@ -35,6 +35,7 @@ Confirmed with Kyler on 2026-08-27:
 | 2026-10-04 | `/insights` becomes the hub for all author news: Substack teasers + book updates + personal updates (new `category` field) |
 | 2026-10-04 | Discovered this bible's claude.ai-Project copy and the local machine's copy (written directly by Claude Code at the end of its own sessions) had drifted apart since the project started; reconciled both into one file this session — see the process note in §7 |
 | 2026-10-26 | Add an AI chat assistant to wakefieldwrites.com as a live demo for Kyler's new client-services business (adding features to clients' existing sites). Scope: site + book/articles, describes rather than argues, no opinions; chats saved and viewable in admin; separate Anthropic key + spend limit; built as a reusable module |
+| 2026-10-26 | Reader accounts approved: email magic-link sign-in (Google later), order tracking, order/welcome emails plus opt-in book news and opt-in News-post emails (sent by button, never automatically), from Kyler Wakefield <kyler@wakefieldwrites.com>, verified-buyer review badge. Built AFTER the PayPal fixes are live |
 
 ## 4. The book (source material for site copy)
 
@@ -488,6 +489,29 @@ Built per `prompts/chatbot-fixes.md` (Kyler's requests after testing the live ch
 Reminder: Kyler pushes with `git push origin main` himself; never Redeploy an older deployment in Vercel.
 
 **Real-model checks passed 2026-10-26** (Kyler, live, after pushing `a0b818f`): the chat starts closed and the gold speech-bubble "?" launcher shows bottom-right. "Tell me about the book and its author" gave a compact answer (~110 words for a two-part question) with labeled links. "What do you think of Kyler?" gave no opinion and no addiction detail, only an About-page link. The politics question was declined cleanly. Small nit for later: the bot says "a rancher **from** Santa Rosa" (Kyler grew up in Duluth; the site says he works/lives in Santa Rosa). Changing the intro line in `src/features/chatbot/config.ts` to "based in Santa Rosa" would fix it.
+
+## 5af. Reader accounts — scoped, prompts written — 2026-10-26
+
+Kyler wants reader accounts so buyers can track orders and get email updates. **Blockers found:** (1) no orders are recorded yet, because the PayPal webhook was never switched on (5w), so accounts can't show orders until it is; (2) every RLS policy and admin check treats any `authenticated` user as admin, so opening sign-up without fixing that would give every reader admin powers.
+
+**Decisions (asked and answered 2026-10-26):**
+- **Sequence:** PayPal fixes first (`prompts/paypal-webhook-fixes.md`, header updated to say so), then accounts (`prompts/user-accounts.md`).
+- **Sign-in:** email magic link only for now; Google sign-in later as a small follow-up.
+- **Emails:** order received and shipped-with-tracking (to every buyer), a welcome email, opt-in book & author news (composed in a new `/admin/updates`), and opt-in News-post emails via a "Send to subscribers" button. Never auto-sent on publish.
+- **From:** Kyler Wakefield <kyler@wakefieldwrites.com>.
+- **Order ↔ account:** auto-match by email, a manual claim (PayPal order/transaction ID + PayPal email), and admin linking.
+- **Reviews:** a "Verified buyer" badge for signed-in reviewers with a linked order.
+
+**Built into the prompt:**
+- Part 0 security: `is_admin()` from `app_metadata.role`, every `authenticated` admin policy rewritten, all admin routes and actions checking the role, and tests with a real non-admin user.
+- Supabase custom SMTP through Resend for magic-link emails.
+- CAN-SPAM: opt-in sends stay disabled until a mailing address (PO box OK) is set.
+- One-click unsubscribe with RFC 8058 headers.
+- Batch sending driven from admin, with no new cron.
+- Account deletion keeps orders but unlinks them.
+- A Privacy page update.
+
+**Needs from Kyler:** the PayPal setup steps (5w), Resend domain + DNS, the Supabase Auth settings, and a postal mailing address for the email footer. Neither prompt is built yet.
 
 ## 6. Open items / needs from Kyler
 
