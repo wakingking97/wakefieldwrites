@@ -92,7 +92,7 @@ export default function ChatWidget({ ui }: { ui: ChatbotUi }) {
   // Lazy initializers run on the client during hydration; nothing renders
   // until isClient, so the server and client markup still match.
   const [stored] = useState<Stored>(() => (typeof window === "undefined" ? {} : readStored(ui.storageKey)));
-  const [userOpen, setUserOpen] = useState<boolean | null>(stored.open ?? null);
+  const [open, setOpen] = useState(stored.open ?? false);
   const [corner, setCorner] = useState<Corner | null>(stored.corner ?? null);
   const [messages, setMessages] = useState<Msg[]>(stored.messages ?? []);
   const [sessionId, setSessionId] = useState<string | null>(stored.sessionId ?? null);
@@ -115,10 +115,8 @@ export default function ChatWidget({ ui }: { ui: ChatbotUi }) {
   } | null>(null);
 
   const hidden = ui.hiddenPathPrefixes.some((p) => pathname === p || pathname.startsWith(`${p}/`));
-  const quiet = ui.quietPaths.some((p) => pathname === p || pathname.startsWith(`${p}/`));
-  // First visit: open on desktop, closed on mobile and on quiet pages. Once
-  // the visitor opens or closes it themselves, that choice wins everywhere.
-  const open = userOpen ?? (isDesktop && !quiet);
+  // Always starts closed; it opens only when the visitor clicks the launcher,
+  // and their last choice is remembered after that.
 
   const size = open ? panelSize(vw, vh, isDesktop) : { w: isDesktop ? 52 : 44, h: isDesktop ? 52 : 44 };
   const base = corner ?? (isDesktop ? ui.defaultCorner.desktop : ui.defaultCorner.mobile);
@@ -127,7 +125,7 @@ export default function ChatWidget({ ui }: { ui: ChatbotUi }) {
     bottom: clamp(base.bottom, 0, vh - size.h),
   };
 
-  // The closed "?" steps above or below keep-clear elements (by the smaller
+  // The closed launcher steps above or below keep-clear elements (by the smaller
   // move) while one is under it, then settles back. Measured on scroll and
   // resize, since those elements move with the page.
   const [nudgedBottom, setNudgedBottom] = useState<number | null>(null);
@@ -181,14 +179,14 @@ export default function ChatWidget({ ui }: { ui: ChatbotUi }) {
   useEffect(() => {
     if (!isClient) return;
     writeStored(ui.storageKey, {
-      ...(userOpen === null ? {} : { open: userOpen }),
+      open,
       ...(corner ? { corner } : {}),
       messages: messages.filter((m) => m.role !== "notice").slice(-ui.maxStoredMessages),
       ...(sessionId ? { sessionId } : {}),
     });
-  }, [isClient, ui.storageKey, ui.maxStoredMessages, userOpen, corner, messages, sessionId]);
+  }, [isClient, ui.storageKey, ui.maxStoredMessages, open, corner, messages, sessionId]);
 
-  // Focus moves into the input on open and back to the "?" button on close
+  // Focus moves into the input on open and back to the launcher on close
   // (only when the visitor did it, never on page load).
   useEffect(() => {
     if (focusAfter.current === "input" && open) inputRef.current?.focus();
@@ -203,11 +201,11 @@ export default function ChatWidget({ ui }: { ui: ChatbotUi }) {
 
   const openPanel = useCallback(() => {
     focusAfter.current = "input";
-    setUserOpen(true);
+    setOpen(true);
   }, []);
   const closePanel = useCallback(() => {
     focusAfter.current = "launcher";
-    setUserOpen(false);
+    setOpen(false);
   }, []);
 
   // ---- dragging (pointer events: mouse, pen and touch) ----
@@ -334,7 +332,7 @@ export default function ChatWidget({ ui }: { ui: ChatbotUi }) {
           type="button"
           className={styles.launcher}
           style={{ ...position, width: size.w, height: size.h }}
-          aria-label={`Open chat: ${ui.title}`}
+          aria-label={ui.launcherLabel}
           aria-expanded={false}
           onClick={() => {
             if (suppressClick.current) {
@@ -345,7 +343,21 @@ export default function ChatWidget({ ui }: { ui: ChatbotUi }) {
           }}
           {...dragHandlers}
         >
-          ?
+          <svg viewBox="0 0 32 32" aria-hidden="true" className={styles.launcherIcon}>
+            <path
+              className={styles.launcherBubble}
+              d="M9 4h14a6 6 0 0 1 6 6v7a6 6 0 0 1-6 6h-8l-6 5.5V23a6 6 0 0 1-6-6v-7a6 6 0 0 1 6-6z"
+            />
+            <path
+              d="M13 10.6a3 3 0 1 1 4.3 2.7c-.8.4-1.3 1-1.3 1.9v.5"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+            <circle cx="16" cy="18.6" r="1.3" fill="currentColor" />
+          </svg>
         </button>
       </div>
     );
@@ -407,11 +419,15 @@ export default function ChatWidget({ ui }: { ui: ChatbotUi }) {
           {messages.map((m, i) =>
             m.role === "notice" ? (
               <p key={i} className={styles.notice}>
-                <RichText text={m.content} linkClassName={styles.link} />
+                <RichText text={m.content} linkClassName={styles.link} ownHosts={ui.ownHosts} />
               </p>
             ) : (
               <p key={i} className={`${styles.bubble} ${m.role === "user" ? styles.user : styles.assistant}`}>
-                {m.role === "assistant" ? <RichText text={m.content} linkClassName={styles.link} /> : m.content}
+                {m.role === "assistant" ? (
+                  <RichText text={m.content} linkClassName={styles.link} ownHosts={ui.ownHosts} />
+                ) : (
+                  m.content
+                )}
               </p>
             ),
           )}

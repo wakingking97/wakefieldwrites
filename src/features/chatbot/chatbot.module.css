@@ -16,17 +16,32 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 9999px;
-  border: 1px solid var(--cb-accent);
-  background: var(--cb-accent);
+  padding: 0;
+  border: 0;
+  border-radius: 12px;
+  background: transparent;
   color: var(--cb-accent-text);
-  font-family: var(--cb-heading-font);
-  font-size: 1.4rem;
-  font-weight: 600;
-  line-height: 1;
   cursor: grab;
   touch-action: none;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+}
+
+.launcherIcon {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.5));
+}
+
+.launcherBubble {
+  fill: var(--cb-accent);
+  stroke: var(--cb-background);
+  stroke-width: 1;
+}
+
+.launcher:hover .launcherBubble,
+.launcher:focus-visible .launcherBubble {
+  fill: color-mix(in srgb, var(--cb-accent) 82%, #fff);
 }
 
 .launcher:active {

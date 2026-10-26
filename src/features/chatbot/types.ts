@@ -34,10 +34,11 @@ export type ChatbotUi = {
     bodyFont: string;
   };
   hiddenPathPrefixes: string[];
-  // Pages where the widget starts closed unless the visitor opened it
-  // themselves (e.g. a checkout the open panel would cover).
-  quietPaths: string[];
-  // Elements the closed "?" button steps around (above or below) instead of
+  // Closed-state button's accessible name.
+  launcherLabel: string;
+  // Hosts whose absolute links in replies are rewritten to same-tab paths.
+  ownHosts: string[];
+  // Elements the closed launcher steps around (above or below) instead of
   // covering, e.g. checkout buttons.
   keepClearSelectors: string[];
   mobileBreakpoint: number;
@@ -62,6 +63,11 @@ export type ChatbotPersona = {
   siteName: string;
   siteDescription: string;
   ownerName: string;
+  // How replies introduce the owner, e.g. "author of X, based in Y".
+  ownerIntro: string;
+  // The one line replies may give about the owner's personal history
+  // unless a visitor asks about it directly.
+  historyLine: string;
   contactEmail: string;
   aboutPath: string;
   crisisLine: string;

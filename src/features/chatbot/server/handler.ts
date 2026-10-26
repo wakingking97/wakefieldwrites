@@ -142,7 +142,14 @@ export async function handleChatRequest(request: Request, config: ChatbotConfig)
       let pending = "";
       let decided = false;
       let declined = false;
+      // After the tag is stripped, the reply's leading whitespace may arrive
+      // in a later chunk, so keep trimming until real text goes out.
+      let trimLead = false;
       const emit = (s: string) => {
+        if (trimLead) {
+          s = s.trimStart();
+          if (s) trimLead = false;
+        }
         if (!s) return;
         full += s;
         controller.enqueue(encoder.encode(s));
@@ -155,7 +162,8 @@ export async function handleChatRequest(request: Request, config: ChatbotConfig)
         decided = true;
         if (head.startsWith(DECLINE_TAG)) {
           declined = true;
-          emit(head.slice(DECLINE_TAG.length).trimStart());
+          trimLead = true;
+          emit(head.slice(DECLINE_TAG.length));
         } else {
           emit(pending);
         }

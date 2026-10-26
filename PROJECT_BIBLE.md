@@ -473,6 +473,20 @@ Reminder: Kyler pushes with `git push origin main` himself; never Redeploy an ol
 
 Cosmetic only: some links render as raw URLs instead of labeled links, and declined replies start with a stray leading space (left over from stripping `[[declined]]`). Desktop default-open panel sits over the hero book image, not over the Kindle button.
 
+## 5ae. Site chat fixes after first live use — BUILT, committed locally — 2026-10-26
+
+Built per `prompts/chatbot-fixes.md` (Kyler's requests after testing the live chat on 2026-10-26). Build and lint clean. **Not yet pushed.**
+
+- **Never opens by default.** The widget starts closed on every page and screen size for every new visitor; it opens only when the visitor clicks the launcher. The desktop open-by-default rule and the /book "quiet page" special case are gone (`quietPaths` removed from config). The visitor's own choice, position and conversation are still remembered. **localStorage key bumped to `wakefieldwrites:chat:v2`**, so everyone, including visitors auto-opened under v1, starts closed once (their old conversation isn't carried over).
+- **Launcher:** the plain round "?" is now an inline-SVG gold speech bubble with a tail and a dark "?" centered in it (no icon library). 52px on desktop, 44px on phones. It lightens on hover/focus and gets a gold focus ring. aria-label "Open chat — ask about the book and site" (`launcherLabel` in config). Still draggable; the keep-clear step around `.paypal-buttons` is unchanged.
+- **Answer rules (`prompt.ts`):** at most about 80 words in one or two short paragraphs unless the visitor asks for more detail, with one or two sentences per part of a two-part question. It never narrates its own rules or framing unless declining. Every link must be `[label](url)`, never a bare URL. No markdown except links (no asterisks or underscores). **Describing Kyler:** it leads with author, rancher, writer of The Human Species Project on Substack, and Santa Rosa, NM (`persona.ownerIntro` in config). It goes into the addiction/recovery story only if asked directly; otherwise at most one line, "He tells the story of his recovery on the About page," with the link (`persona.historyLine`). **Kyler can override this.** If he wants it mentioned more fully, loosen the "Describing" rule in `prompt.ts`.
+- **Rendering (`RichText.tsx`):** absolute links to wakefieldwrites.com / www (config `ownHosts`, plus the current host) are rewritten to same-tab relative paths, for both `[label](url)` and bare URLs. Stray `*` and word-edge `_` markers are stripped from text and link labels, never from URLs; snake_case is left alone.
+- **Declined replies:** the leading space is fixed. The server now keeps trimming the start of the stream after `[[declined]]` is removed, even when the space arrives in a later chunk (the old code only trimmed the chunk that held the tag).
+
+**Verified locally** (Playwright, stub model, dev server): 29/29 checks passed. Fresh visitor at 1280 and 390 on /, /book and /writing: closed, bubble visible. Click opens it, close brings back the launcher, and reload remembers the last choice (closed and open). A v1 `open: true` visitor starts closed. Links render labeled, own-site absolute URLs become `/book` and `/sample#start` in the same tab, external links keep underscores and open in a new tab, and emphasis is stripped. The stub's declined reply has no leading space, the launcher drags without opening, and it steps clear of a stand-in `.paypal-buttons` element (PayPal doesn't render locally). Screenshots: `prompts/screenshots/chat-launcher-1280*.png`, `chat-launcher-390*.png` (plus a 3× phone close-up), `chat-render-1280.png`. **Not verified:** the real-model checks (80-word answer, the "What do you think of Kyler?" answer, a political decline against Haiku). There's no chat key on this machine, so Kyler should try those three on the live site after pushing.
+
+Reminder: Kyler pushes with `git push origin main` himself; never Redeploy an older deployment in Vercel.
+
 ## 6. Open items / needs from Kyler
 
 - [x] ~~Real book description/back-cover copy~~ — using manuscript's own "About This Book" text, confirmed
@@ -511,6 +525,7 @@ Cosmetic only: some links render as raw URLs instead of labeled links, and decli
 - [ ] **PayPal order webhook — deferred by Kyler 2026-10-04.** Full setup steps in 5w; fix prompt saved (see 5w note). Pick back up when Kyler has time.
 - [x] ~~**Insights auto-drafting (5x)**~~ — DONE 2026-10-04: pushed, env vars set (`ANTHROPIC_API_KEY2`, `CRON_SECRET`), API credits added, manual run produced two drafts. Remaining: confirm the first cron run on Mon 2026-10-12.
 
+- [ ] **NEW 2026-10-26 — Chat fixes (5ae):** Kyler to push, then on the live site ask "Tell me about the book and its author" (about 80 words or fewer, labeled links), "What do you think of Kyler?" (no addiction detail unprompted) and a political question (declined, no leading space).
 - [ ] **NEW 2026-10-26 — Site chat (5ad):** Kyler to create a separate Anthropic workspace with a spend limit and add `ANTHROPIC_API_KEY_CHAT` and `CHAT_IP_SALT` to Vercel (Production, Sensitive), push, then try the four starter questions plus "How much is shipping?" live and check `/admin/chats`.
 
 ## 7. How to pick this back up

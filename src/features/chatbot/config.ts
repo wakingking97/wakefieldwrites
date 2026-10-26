@@ -158,7 +158,9 @@ async function buildKnowledge(): Promise<string> {
 
 export const chatbotConfig: ChatbotConfig = {
   ui: {
-    storageKey: "wakefieldwrites:chat:v1",
+    // v2 (2026-10-26): the widget no longer opens by default; the new key
+    // starts everyone closed, including visitors auto-opened under v1.
+    storageKey: "wakefieldwrites:chat:v2",
     title: "Ask about the book & site",
     tag: "AI assistant",
     greeting:
@@ -192,7 +194,8 @@ export const chatbotConfig: ChatbotConfig = {
       bodyFont: "var(--font-sans)",
     },
     hiddenPathPrefixes: ["/admin"],
-    quietPaths: ["/book"],
+    launcherLabel: "Open chat — ask about the book and site",
+    ownHosts: ["wakefieldwrites.com", "www.wakefieldwrites.com"],
     // PayPal's Checkout/Venmo buttons on /book render wider than their card.
     keepClearSelectors: [".paypal-buttons"],
     mobileBreakpoint: 768,
@@ -205,6 +208,11 @@ export const chatbotConfig: ChatbotConfig = {
     siteDescription:
       "the author site of Kyler Wakefield, who wrote the book Pulling the Thread: Perception, Control, and the System Behind Everything, and writes The Human Species Project on Substack",
     ownerName: "Kyler",
+    ownerIntro:
+      "Kyler Wakefield is the author of Pulling the Thread, a rancher, and the writer of The Human Species Project on Substack, based in Santa Rosa, New Mexico",
+    // Kyler's call (2026-10-26): one line unless asked. If he wants the bot
+    // to say more, loosen the rule in prompt.ts ("Describing ...").
+    historyLine: "He tells the story of his recovery on the About page.",
     contactEmail: CONTACT_EMAIL,
     aboutPath: "/about",
     crisisLine: "988, the US Suicide & Crisis Lifeline (call or text 988)",
