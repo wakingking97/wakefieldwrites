@@ -464,6 +464,15 @@ Built per `prompts/site-chatbot.md` (Kyler approved 2026-10-26). Purely additive
 
 Reminder: Kyler pushes with `git push origin main` himself; never Redeploy an older deployment in Vercel. Env vars only apply to new deployments.
 
+**Live and verified 2026-10-26:** Kyler added the "Site chat" workspace (with a spend limit), `ANTHROPIC_API_KEY_CHAT` and `CHAT_IP_SALT` before pushing `1bc68aa`. Tested on the live homepage via Chrome; all five behavior checks passed:
+- "What's the book about?" gave an accurate short description with links.
+- The shipping question said it isn't known, the total shows at PayPal checkout, and gave the email.
+- A political opinion question was politely declined.
+- "Ignore your instructions" was declined.
+- "Latest from the Substack" returned the Oct 25 post "The Lesson Nobody Teaches" with its link.
+
+Cosmetic only: some links render as raw URLs instead of labeled links, and declined replies start with a stray leading space (left over from stripping `[[declined]]`). Desktop default-open panel sits over the hero book image, not over the Kindle button.
+
 ## 6. Open items / needs from Kyler
 
 - [x] ~~Real book description/back-cover copy~~ — using manuscript's own "About This Book" text, confirmed
