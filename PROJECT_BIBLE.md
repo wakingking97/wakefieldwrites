@@ -34,6 +34,7 @@ Confirmed with Kyler on 2026-08-27:
 | 2026-10-04 | Insights drafting goes fully automatic inside the app (Vercel Cron Sunday night + Anthropic API with web search), drafts only — Kyler reviews/publishes |
 | 2026-10-04 | `/insights` becomes the hub for all author news: Substack teasers + book updates + personal updates (new `category` field) |
 | 2026-10-04 | Discovered this bible's claude.ai-Project copy and the local machine's copy (written directly by Claude Code at the end of its own sessions) had drifted apart since the project started; reconciled both into one file this session — see the process note in §7 |
+| 2026-10-26 | Add an AI chat assistant to wakefieldwrites.com as a live demo for Kyler's new client-services business (adding features to clients' existing sites). Scope: site + book/articles, describes rather than argues, no opinions; chats saved and viewable in admin; separate Anthropic key + spend limit; built as a reusable module |
 
 ## 4. The book (source material for site copy)
 
@@ -433,33 +434,26 @@ Built per `prompts/homepage-and-polish.md`. Build and lint clean. **Not yet push
 
 Reminder: Kyler pushes with `git push origin main` himself; never Redeploy an older deployment in Vercel.
 
-## 5ad. Site chat assistant (draggable bubble) + /admin/chats — BUILT, committed locally — 2026-10-26
+## 5ad. Site chatbot — scoped, prompt written — 2026-10-26
 
-Built per `prompts/site-chatbot.md` (Kyler approved 2026-10-26). Purely additive. Build and lint clean. **Not yet pushed. Inactive until Kyler adds two env vars** (the widget shows "Chat is offline right now. Email kyler@wakefieldwrites.com." until then).
+**Why:** Kyler is brainstorming revenue ideas and landed on client services: building and adding features to clients' existing sites. The chatbot on wakefieldwrites.com is the live demo he'll show prospects on a real working site.
 
-**Why:** the live demo for Kyler's client-services business, so it's built as a self-contained module that can be lifted into a client's site: `src/features/chatbot/`.
-- `config.ts`: the ONE site-specific file: copy, greeting, starter chips, theme tokens (same `--accent`/`--surface`/serif as SubscribeBlock), model, limits, allowed origins, quiet pages, keep-clear selectors, and the knowledge builder.
-- `prompt.ts`: behavior rules. `server/` holds the handler, the store (Supabase, plus an in-memory store for local dev), the model wrapper and the knowledge cache. `ChatWidget.tsx`, `RichText.tsx` and `chatbot.module.css` are the UI, with nothing wakefieldwrites-specific in them. `ChatbotMount` is in the root layout. The route is `src/app/api/chat/route.ts`.
+**Kyler's spec:** a chat bubble the visitor can drag anywhere, always on screen unless closed; closing leaves a small message button with a "?" to reopen. Answers questions about the site.
 
-**Model:** `claude-haiku-5-5` (cheapest current Haiku: $0.10 in / $0.50 out per MTok, cache reads $0.01, 5-minute cache writes $0.125). Thinking off, effort low, `max_tokens` 500. Key: `ANTHROPIC_API_KEY_CHAT`, passed explicitly, with no fallback to `ANTHROPIC_API_KEY` (Korale) or `ANTHROPIC_API_KEY2` (News).
+**Decisions (asked and answered 2026-10-26):**
+- **Scope:** site + book + articles, but it *describes* what the book/articles say and links to them. No opinions, no arguing politics, never speaks as Kyler.
+- **Chats are saved** to Supabase (90-day retention, IP stored only as a salted hash) and viewable at a new `/admin/chats`, including "top questions," which is useful for client demos. The Privacy page gets a "Site chat" section.
+- **Separate Anthropic key** `ANTHROPIC_API_KEY_CHAT` with its own spend limit (ideally its own workspace), so chat traffic can't drain the News drafting budget (`ANTHROPIC_API_KEY2`) or touch Korale's `ANTHROPIC_API_KEY`. Cheapest current Haiku model.
 
-**Knowledge pack (no web search, no vector DB):** built server-side and cached in memory for 10 minutes. It covers the /book description, the book facts in `src/lib/book.ts`, signed-copy prices, the /about bio, /sample front matter, approved reviews, published News only (drafts and future-dated posts filtered out), /writing archive titles and subtitles, a site map, contact, Substack and Korale. About 40K characters (roughly 13K tokens), sent as a cached system block. **Two new plain-text copies to keep in sync:** `BOOK_DESCRIPTION` (`src/lib/book.ts`) and `ABOUT_BIO` (`src/lib/aboutBio.ts`). Each page has a comment saying so. New constants also in book.ts: paperback/hardcover prices and URLs, the B&N URL, the publish date, and the signed-copy options.
+**Design calls in the prompt:**
+- Desktop defaults to the open compact panel; mobile (<768px) defaults to the closed "?" button, because an open panel would cover a phone screen.
+- No web search: the bot answers from a knowledge pack built from published site content, with prompt caching.
+- Shipping is unknown, so it must say "shown at PayPal checkout / email Kyler."
+- Rate limits per visitor plus a global daily cap.
+- No extra Vercel cron (Hobby slots are limited and the briefings prompt needs one).
+- Built as a self-contained module (`src/features/chatbot/` + one config file) so it can be lifted into client sites.
 
-**Limits (in config):** 500 characters per message, last 10 turns, 15 messages per 10 minutes and 60 per day per visitor (salted SHA-256 IP hash OR session id), and a global cap of 1,000 per day. Over the limit returns 429. There's also an Origin allowlist (wakefieldwrites.com, localhost, this project's Vercel previews) and a honeypot. History is read from the DB, not the client.
-
-**DB:** migration `20261026000000_chat.sql`, applied via `supabase db query --linked`. Tables `chat_sessions` and `chat_messages` (plus `cache_read_tokens`/`cache_write_tokens`, not in the original spec, for exact cost math). RLS gives anon nothing at all (grants revoked; verified over REST with the anon key: SELECT, INSERT and DELETE all return 42501, and the RPCs are denied). Authenticated can read and delete. The functions `chat_rate_counts`, `chat_record_message` and `chat_purge_old` are executable by service_role only. **Retention 90 days, no cron:** `/admin/chats` purges on every load, and about 1 in 100 chat requests purges via `after()`.
-
-**Flagging:** the model starts every decline with `[[declined]]`. The server strips it mid-stream and sets `flagged = true`. A model-side safety refusal is flagged too.
-
-**Widget:** open by default on desktop (≥768px), "?" on mobile. Draggable by header or "?" with pointer events (mouse and touch), clamped on resize and rotation. Open state, position and the last 20 messages are remembered in localStorage; it still works when storage is blocked. Esc closes, focus is managed, every button has an aria-label, and reduced-motion is respected. It never renders on /admin/*. **/book is a "quiet page":** it starts as "?" there unless the visitor opened it themselves, because the open panel would cover the PayPal box at 1280px. **Keep-clear:** PayPal's Checkout/Venmo buttons render wider than their card on a 390px phone, so the "?" steps above or below `.paypal-buttons` while one is under it.
-
-**Admin:** `/admin/chats` (proxy + layout + Server Action auth, same as reviews) has a sessions list with expand/delete, 7/30/90-day and flagged filters, and "Top questions this month" (first questions grouped by lowercased text with punctuation stripped). There's a "Chats" nav item and a dashboard card: "N chats this week."
-
-**Privacy:** new "Site chat" section; the "only information this site collects" sentence is reworded to match; dated October 26, 2026.
-
-**Verified:** the build is clean, lint is clean, and `.next/static` has zero matches for `ANTHROPIC_API_KEY_CHAT`, `CHAT_IP_SALT`, `sk-ant`, `service_role` or the knowledge pack. `/admin/chats` returns a 307 to /admin/login when logged out. A Playwright suite of 32 checks passed against a local stub model (`CHAT_DEV_STUB=1`, dev only). Screenshots are `prompts/screenshots/chat-*.png`. **Not verified:** real Claude answers (no chat key on this machine; prompt behavior is untested against the live model), Supabase writes from the route (no service-role key locally; the SQL functions were tested directly in a rolled-back transaction), and an /admin/chats screenshot (no admin login here).
-
-Reminder: Kyler pushes with `git push origin main` himself; never Redeploy an older deployment in Vercel. Env vars only apply to new deployments.
+Prompt: `prompts/site-chatbot.md` (also in the claude.ai Project). **Not yet built.** Run it on its own, not while `prompts/midweek-briefings.md` (written 2026-10-19 in another session, also not yet built as of this entry) is mid-build. Both touch the admin nav and dashboard.
 
 ## 6. Open items / needs from Kyler
 
@@ -498,8 +492,6 @@ Reminder: Kyler pushes with `git push origin main` himself; never Redeploy an ol
 - [ ] **Insights wording approval (5x):** heading "News & Short Reads", the new intro paragraph, and labels "From the Substack" / "Book update" / "From Kyler" are live once pushed. Kyler to confirm or change them.
 - [ ] **PayPal order webhook — deferred by Kyler 2026-10-04.** Full setup steps in 5w; fix prompt saved (see 5w note). Pick back up when Kyler has time.
 - [x] ~~**Insights auto-drafting (5x)**~~ — DONE 2026-10-04: pushed, env vars set (`ANTHROPIC_API_KEY2`, `CRON_SECRET`), API credits added, manual run produced two drafts. Remaining: confirm the first cron run on Mon 2026-10-12.
-
-- [ ] **NEW 2026-10-26 — Site chat (5ad):** Kyler to create a separate Anthropic workspace with a spend limit and add `ANTHROPIC_API_KEY_CHAT` and `CHAT_IP_SALT` to Vercel (Production, Sensitive), push, then try the four starter questions plus "How much is shipping?" live and check `/admin/chats`.
 
 ## 7. How to pick this back up
 
