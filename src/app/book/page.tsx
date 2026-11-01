@@ -7,6 +7,7 @@ import {
   KINDLE_PRICE,
   KINDLE_UNLIMITED_NOTE,
   KINDLE_URL,
+  SIGNED_COPY_SHIPPING_NOTE,
 } from "@/lib/book";
 import { pageMetadata } from "@/lib/metadata";
 
@@ -129,7 +130,10 @@ export default function BookPage() {
               directly from the author. Same book &mdash; you just
               can&rsquo;t get this one on Amazon.
             </p>
-            <div className="mt-5">
+            <p className="mt-3 text-sm font-medium text-accent">
+              {SIGNED_COPY_SHIPPING_NOTE}
+            </p>
+            <div className="mt-4">
               <PayPalButton />
             </div>
           </div>

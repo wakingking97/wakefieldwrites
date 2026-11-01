@@ -16,6 +16,7 @@ import {
   PAPERBACK_URL,
   PUBLISHED_DATE,
   SIGNED_COPY_OPTIONS,
+  SIGNED_COPY_SHIPPING_NOTE,
 } from "@/lib/book";
 import { getHspArticles } from "@/lib/hspFeed";
 import { CATEGORY_LABELS, displayDate, getPublishedInsights } from "@/lib/insights";
@@ -90,7 +91,7 @@ async function buildKnowledge(): Promise<string> {
         "Signed copies, bought directly from Kyler on /book (personally signed, shipped directly from the author, paid through PayPal):",
         ...SIGNED_COPY_OPTIONS.map((o) => `- ${o.name}: ${o.price}`),
         "",
-        `Shipping for signed copies: the cost is NOT known here. The total, including shipping, is shown at PayPal checkout on /book. For questions, email ${CONTACT_EMAIL}.`,
+        `Shipping for signed copies: the prices listed above already include shipping (${SIGNED_COPY_SHIPPING_NOTE}). For other shipping questions (where it ships, how long it takes), the answer is not known here: offer ${CONTACT_EMAIL}.`,
       ].join("\n"),
     ),
     section("About Kyler Wakefield (the /about page, in his own words)", () => ABOUT_BIO.join("\n\n")),

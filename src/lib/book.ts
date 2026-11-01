@@ -20,8 +20,9 @@ export const BARNES_NOBLE_URL =
   "https://www.barnesandnoble.com/w/pulling-the-thread-kyler-wakefield/1150213186?ean=9798256364335";
 export const PUBLISHED_DATE = "June 4, 2026";
 
-// Signed copies sold direct through the PayPal widget on /book. Shipping is
-// added at PayPal checkout and is not known here.
+// Signed copies sold direct through the PayPal widget on /book. The listed
+// prices already include shipping (Kyler, 2026-11-01).
+export const SIGNED_COPY_SHIPPING_NOTE = "Prices include shipping.";
 export const SIGNED_COPY_OPTIONS = [
   { name: "Paperback", price: "$25" },
   { name: "Hardcover Case Laminate", price: "$35" },

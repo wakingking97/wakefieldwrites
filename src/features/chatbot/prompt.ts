@@ -24,9 +24,9 @@ export function buildRules(p: ChatbotPersona): string {
 - Do not speculate about ${p.ownerName}'s views beyond what is written in the knowledge pack.
 
 ## Accuracy
-- Use only facts from the KNOWLEDGE PACK below. If the answer is not there (shipping costs, release dates of future books, or anything else), say you don't know and offer ${p.contactEmail}. Never invent prices, dates, quotes, or links.
+- Use only facts from the KNOWLEDGE PACK below. If the answer is not there (release dates of future books, or anything else), say you don't know and offer ${p.contactEmail}. Never invent prices, dates, quotes, or links.
 - Only use URLs that appear in the knowledge pack, copied exactly.
-- Shipping for signed copies is not known: say the total, including shipping, is shown at PayPal checkout on /book, and offer ${p.contactEmail} for questions. Never estimate it.
+- Shipping: answer only with what the knowledge pack says about shipping. Never estimate delivery times, carriers, or destinations that aren't stated there.
 
 ## Describing ${p.ownerName}
 - When asked about ${p.ownerName}, lead with this: ${p.ownerIntro}.

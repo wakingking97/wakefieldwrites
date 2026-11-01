@@ -515,6 +515,8 @@ Kyler wants reader accounts so buyers can track orders and get email updates. **
 
 **Gotcha (2026-11-01):** the Sunday job skips Substack posts whose audience is "only_subscribers" (free sign-up required). The public API only returns about a 66-word preview of those, so the job logs them as paywalled. Example: "Say It Anyway" (Nov 1, 1,918 words). It still shows on /writing. Fix per post: set the Substack post's audience to Everyone, then click "Check Substack now". Or write that News post by hand. **Follow-up the same day:** Kyler switched the post to Everyone, but the job still skipped it, because Substack's archive list kept reporting `only_subscribers` even after the post endpoint said `everyone`. Fixed in `713a81f`: `getPostText()` now takes the audience from `/api/v1/posts/{slug}` (and checks `free_unlock_required`), with the archive value only as a fallback.
 
+**Signed-copy prices include shipping (Kyler, 2026-11-01).** /book now shows "Prices include shipping." in gold right above the PayPal widget (constant `SIGNED_COPY_SHIPPING_NOTE` in `src/lib/book.ts`). The chat assistant's knowledge pack and prompt were updated to match. It used to say shipping was unknown and added at checkout. Other shipping questions (destinations, timing) still go to Kyler's email. This also resolves the 5aa open item "no shipping cost shown on /book".
+
 ## 6. Open items / needs from Kyler
 
 - [x] ~~Real book description/back-cover copy~~ — using manuscript's own "About This Book" text, confirmed

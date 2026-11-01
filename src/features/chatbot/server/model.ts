@@ -79,9 +79,9 @@ export function stubModel(): ReplyModel {
     } else if (/politic|president|election|trump|biden|democrat|republican/.test(q)) {
       reply = `${DECLINE_TAG}I don't share opinions on politics. I'm here to help people find their way around Kyler's work. [The book page](/book) describes what Pulling the Thread covers.`;
     } else if (/shipping/.test(q)) {
-      reply = "I don't know the shipping cost. The total, including shipping, is shown at PayPal checkout on [the book page](/book). For questions, email kyler@wakefieldwrites.com.";
+      reply = "Shipping is included in the signed-copy prices on [the book page](/book). For other shipping questions, email kyler@wakefieldwrites.com.";
     } else if (/signed/.test(q)) {
-      reply = "You can buy a signed copy directly from Kyler on [the book page](/book): Paperback $25, Hardcover Case Laminate $35, or Hardcover w/Paper Sleeve $40. Shipping is added at PayPal checkout.";
+      reply = "You can buy a signed copy directly from Kyler on [the book page](/book): Paperback $25, Hardcover Case Laminate $35, or Hardcover w/Paper Sleeve $40. Prices include shipping.";
     } else if (/substack|latest/.test(q)) {
       reply = "New pieces go out on The Human Species Project on Substack. You can browse them on [the Writing page](/writing) or [subscribe on Substack](https://thehumanspeciesproject.substack.com/subscribe).";
     } else if (/kyler|who/.test(q)) {
