@@ -77,11 +77,18 @@ export function htmlToText(html: string): string {
 
 // Plain-text body of a post, or null when it's empty / paywalled (we only
 // ever see a teaser for those and shouldn't draft from it).
+//
+// The post endpoint is the source of truth for the audience: the archive list
+// can lag behind (e.g. after a post is switched from "subscribers only" to
+// "everyone"), so the archive's audience value is only a fallback.
 export async function getPostText(post: SubstackPost): Promise<string | null> {
-  if (post.audience !== "everyone") return null;
-  const data = await getJson<{ body_html?: string | null }>(
-    `${SUBSTACK}/api/v1/posts/${encodeURIComponent(post.slug)}`,
-  );
+  const data = await getJson<{
+    body_html?: string | null;
+    audience?: string;
+    free_unlock_required?: boolean;
+  }>(`${SUBSTACK}/api/v1/posts/${encodeURIComponent(post.slug)}`);
+  if (data.audience) post.audience = data.audience;
+  if (post.audience !== "everyone" || data.free_unlock_required) return null;
   if (!data.body_html) return null;
   const text = htmlToText(data.body_html);
   return text.length > 200 ? text : null;
