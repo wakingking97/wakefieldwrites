@@ -513,6 +513,8 @@ Kyler wants reader accounts so buyers can track orders and get email updates. **
 
 **Needs from Kyler:** the PayPal setup steps (5w), Resend domain + DNS, the Supabase Auth settings, and a postal mailing address for the email footer. Neither prompt is built yet.
 
+**Gotcha (2026-11-01):** the Sunday job skips Substack posts whose audience is "only_subscribers" (free sign-up required). The public API only returns about a 66-word preview of those, so the job logs them as paywalled. Example: "Say It Anyway" (Nov 1, 1,918 words). It still shows on /writing. Fix per post: set the Substack post's audience to Everyone, then click "Check Substack now". Or write that News post by hand.
+
 ## 6. Open items / needs from Kyler
 
 - [x] ~~Real book description/back-cover copy~~ — using manuscript's own "About This Book" text, confirmed
