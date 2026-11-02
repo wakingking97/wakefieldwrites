@@ -517,6 +517,15 @@ Kyler wants reader accounts so buyers can track orders and get email updates. **
 
 **Signed-copy prices include shipping (Kyler, 2026-11-01).** /book now shows "Prices include shipping." in gold right above the PayPal widget (constant `SIGNED_COPY_SHIPPING_NOTE` in `src/lib/book.ts`). The chat assistant's knowledge pack and prompt were updated to match. It used to say shipping was unknown and added at checkout. Other shipping questions (destinations, timing) still go to Kyler's email. This also resolves the 5aa open item "no shipping cost shown on /book".
 
+## 5ag. Test purchase: Base44 thank-you page + no order in admin — 2026-11-02
+
+Kyler bought a signed paperback through /book to test the system. PayPal completed it ($25.00, tx `3MT610862P676474R`), then sent him to **`wakefieldwrites.base44.app/order-thank-you`**, the old Base44 site.
+- **Why Base44:** the site code has no Base44 references. The redirect comes from the **return URL saved in the PayPal hosted button's own settings**. It's the same button the Base44 site used, and that setting was never changed. **Fix:** built `/thank-you` on the new site (Kyler's own thank-you copy, carried over; `noindex`). Kyler changes the button's return URL in PayPal to `https://wakefieldwrites.com/thank-you` after pushing.
+- **Why it's not in /admin:** expected. The PayPal webhook was never connected (5w, deferred 2026-10-04), so the site has never recorded a single order, and the admin counts (0 orders, 0/0 inventory) have always been placeholders. Payments themselves were never affected.
+- **Missed sales?** The site can't answer that; PayPal is the record. Told Kyler to review PayPal → Activity (payments received) since June 2026 and compare against copies he's actually shipped. He should also refund his own $25 test if he wants it back.
+- **Also flagged:** the old Base44 site (`wakefieldwrites.base44.app`) is still live with its own Store page and cart. Old links (social bios, Amazon author page, early posts) may still send people there. Kyler should find and update those links and unpublish the Base44 app if Base44 allows it on the free tier.
+- **Still not connected (unchanged):** PayPal order webhook and the order email to Kyler (5w prompt saved), real inventory counts, and the reader accounts build (5af). Working and verified: reviews, News drafts + cron, chat assistant, analytics, Writing archive.
+
 ## 6. Open items / needs from Kyler
 
 - [x] ~~Real book description/back-cover copy~~ — using manuscript's own "About This Book" text, confirmed
