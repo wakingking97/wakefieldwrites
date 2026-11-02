@@ -16,7 +16,7 @@ export default function PrivacyPage() {
       <h1 className="mt-4 font-serif text-4xl leading-tight sm:text-5xl">
         Privacy Policy
       </h1>
-      <p className="mt-4 text-sm text-muted">Last updated October 26, 2026.</p>
+      <p className="mt-4 text-sm text-muted">Last updated November 2, 2026.</p>
 
       <div className="mt-10 space-y-8 text-base leading-8 text-muted">
         <div>
@@ -33,8 +33,9 @@ export default function PrivacyPage() {
             reviewed before it&rsquo;s published publicly on this site.
           </p>
           <p className="mt-3">
-            Apart from that and the site chat described below, browsing the
-            site doesn&rsquo;t submit any of your information to us.
+            Apart from that, signed-copy orders, and the site chat described
+            below, browsing the site doesn&rsquo;t submit any of your
+            information to us.
           </p>
         </div>
 
@@ -52,6 +53,34 @@ export default function PrivacyPage() {
             are processed entirely by PayPal, on PayPal&rsquo;s own systems,
             under PayPal&rsquo;s own privacy policy. We never see or store
             your payment details.
+          </p>
+        </div>
+
+        <div>
+          <h2 className="font-serif text-xl text-foreground">
+            Signed-copy orders
+          </h2>
+          <p className="mt-3">
+            When you buy a signed copy, PayPal notifies this site of the
+            order. We store your name, email address, shipping address, the
+            edition and quantity you ordered, the amount paid, and
+            PayPal&rsquo;s order number in this site&rsquo;s Supabase
+            database. Kyler also gets an email with those details, sent
+            through the email service Resend.
+          </p>
+          <p className="mt-3">
+            This information is used only to sign, ship, and keep track of
+            your order and to answer questions about it. It isn&rsquo;t sold
+            or used for marketing. Your card and bank details stay with
+            PayPal and never reach this site.
+          </p>
+          <p className="mt-3">
+            To have your order record deleted once your book has shipped,
+            email Kyler at{" "}
+            <a href="mailto:kyler@wakefieldwrites.com" className="text-accent hover:underline">
+              kyler@wakefieldwrites.com
+            </a>
+            .
           </p>
         </div>
 

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase-server";
+import { FORMATS, FORMAT_LABELS } from "@/lib/orders";
 
 export const metadata: Metadata = { title: "Dashboard" };
 
@@ -41,6 +42,7 @@ export default async function AdminHomePage() {
     { count: recentOrderCount },
     { data: inventory },
     { count: weeklyChatCount },
+    { count: flaggedOrderCount },
   ] = await Promise.all([
       supabase
         .from("reviews")
@@ -55,23 +57,30 @@ export default async function AdminHomePage() {
         .from("chat_sessions")
         .select("id", { count: "exact", head: true })
         .gte("created_at", weekAgo),
+      supabase
+        .from("orders")
+        .select("id", { count: "exact", head: true })
+        .is("format", null),
     ]);
 
-  const paperback = inventory?.find((i) => i.format === "paperback");
-  const hardcover = inventory?.find((i) => i.format === "hardcover");
-
   const stats = [
-    { label: "Pending reviews", value: pendingCount ?? "—" },
-    { label: "Orders (30 days)", value: recentOrderCount ?? "—" },
-    {
-      label: "Paperback on hand",
-      value: paperback?.signed_copies_on_hand ?? "—",
-    },
-    {
-      label: "Hardcover on hand",
-      value: hardcover?.signed_copies_on_hand ?? "—",
-    },
+    { label: "Pending reviews", value: pendingCount ?? "—", warn: false },
+    { label: "Orders (30 days)", value: recentOrderCount ?? "—", warn: false },
+    ...FORMATS.map((format) => {
+      const count = inventory?.find((i) => i.format === format)
+        ?.signed_copies_on_hand as number | undefined;
+      return {
+        label: `${FORMAT_LABELS[format]} on hand`,
+        value: count ?? "—",
+        warn: count !== undefined && count < 0,
+      };
+    }),
   ];
+
+  const oversold = FORMATS.filter((format) => {
+    const count = inventory?.find((i) => i.format === format)?.signed_copies_on_hand;
+    return typeof count === "number" && count < 0;
+  });
 
   const cards = [
     ...CARDS,
@@ -86,13 +95,36 @@ export default async function AdminHomePage() {
     <div>
       <h1 className="font-serif text-2xl text-foreground">Dashboard</h1>
 
-      <div className="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-4">
+      {((flaggedOrderCount ?? 0) > 0 || oversold.length > 0) && (
+        <Link
+          href="/admin/orders"
+          className="mt-6 block space-y-1 rounded-lg border border-red-400 p-4 text-sm text-red-400 transition-opacity hover:opacity-90"
+        >
+          {(flaggedOrderCount ?? 0) > 0 && (
+            <p>
+              {flaggedOrderCount} order{flaggedOrderCount === 1 ? "" : "s"}{" "}
+              with an unconfirmed format. Set the format in Orders.
+            </p>
+          )}
+          {oversold.map((format) => (
+            <p key={format}>{FORMAT_LABELS[format]} is oversold. Restock needed.</p>
+          ))}
+        </Link>
+      )}
+
+      <div className="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
         {stats.map((stat) => (
           <div
             key={stat.label}
             className="rounded-lg border border-line bg-surface p-4"
           >
-            <p className="font-serif text-2xl text-foreground">{stat.value}</p>
+            <p
+              className={`font-serif text-2xl ${
+                stat.warn ? "text-red-400" : "text-foreground"
+              }`}
+            >
+              {stat.value}
+            </p>
             <p className="mt-1 text-xs text-muted">{stat.label}</p>
           </div>
         ))}

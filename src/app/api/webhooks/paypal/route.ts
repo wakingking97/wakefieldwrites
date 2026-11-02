@@ -1,44 +1,20 @@
-import { NextResponse, type NextRequest } from "next/server";
+import { after, NextResponse, type NextRequest } from "next/server";
 import { createServiceClient, isSupabaseServiceConfigured } from "@/lib/supabase-service";
+import { recordOrder, sendNewOrderEmail, type PayPalOrder } from "@/lib/orders";
 
 // PayPal webhook: verifies the signature, then on a completed capture
-// records the order and decrements signed-copy inventory.
+// records the order (always, even if the edition can't be identified),
+// applies it to signed-copy inventory exactly once, and emails Kyler.
+// Format detection, recording and the email live in src/lib/orders.ts.
 //
-// UNVERIFIED as of this writing -- see PROJECT_BIBLE.md build log for
-// what this needs before it can be trusted in production:
-//   1. PAYPAL_CLIENT_ID/SECRET, PAYPAL_WEBHOOK_ID, SUPABASE_SERVICE_ROLE_KEY
-//      env vars (none are set yet)
-//   2. Confirmation of the actual item/variation name(s) PayPal sends for
-//      this book's Hosted Button -- FORMAT_KEYWORDS below is a best-guess
-//      substring match ("paperback"/"hardcover" in the item name), not
-//      confirmed against a real payload
-//   3. A live PayPal Sandbox test for both formats (see 3e in the spec)
+// Env: PAYPAL_CLIENT_ID/SECRET (the Live REST app "wakefieldwrites", not
+// the button's NEXT_PUBLIC_PAYPAL_CLIENT_ID), PAYPAL_WEBHOOK_ID,
+// PAYPAL_API_BASE, SUPABASE_SERVICE_ROLE_KEY, and optionally
+// RESEND_API_KEY for the email.
 
+// Defaults to Sandbox; production sets https://api-m.paypal.com explicitly.
 const PAYPAL_API_BASE =
   process.env.PAYPAL_API_BASE || "https://api-m.sandbox.paypal.com";
-
-type PayPalOrder = {
-  id: string;
-  payer?: {
-    name?: { given_name?: string; surname?: string };
-    email_address?: string;
-  };
-  purchase_units?: Array<{
-    amount?: { value?: string; currency_code?: string };
-    items?: Array<{ name?: string; sku?: string; quantity?: string }>;
-    shipping?: {
-      name?: { full_name?: string };
-      address?: Record<string, string>;
-    };
-  }>;
-};
-
-function parseFormat(itemName: string): "paperback" | "hardcover" | null {
-  const name = itemName.toLowerCase();
-  if (name.includes("hardcover")) return "hardcover";
-  if (name.includes("paperback")) return "paperback";
-  return null;
-}
 
 async function getAccessToken(): Promise<string> {
   const clientId = process.env.PAYPAL_CLIENT_ID;
@@ -113,6 +89,10 @@ async function getOrderDetails(
 }
 
 export async function POST(request: NextRequest) {
+  console.log(
+    `PayPal webhook: using ${PAYPAL_API_BASE} (${PAYPAL_API_BASE.includes("sandbox") ? "Sandbox" : "Live"})`,
+  );
+
   if (!isSupabaseServiceConfigured) {
     console.error("PayPal webhook: Supabase service role not configured");
     return NextResponse.json({ error: "not configured" }, { status: 500 });
@@ -172,65 +152,27 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "order fetch failed" }, { status: 500 });
   }
 
-  const unit = order.purchase_units?.[0];
-  const item = unit?.items?.[0];
-  const itemName = item?.name ?? "";
-  const format = parseFormat(itemName);
-  const quantity = Number(item?.quantity ?? 1) || 1;
-
-  if (!format) {
-    console.error(
-      `PayPal webhook: could not determine format from item name "${itemName}" (order ${orderId}). Not recorded -- needs manual reconciliation.`,
-    );
-    return NextResponse.json({ received: true, error: "unrecognized format" });
-  }
-
-  const supabase = createServiceClient();
-
-  const { data: inserted, error: insertError } = await supabase
-    .from("orders")
-    .upsert(
-      {
-        paypal_order_id: orderId,
-        format,
-        quantity,
-        buyer_name:
-          order.payer?.name?.given_name && order.payer?.name?.surname
-            ? `${order.payer.name.given_name} ${order.payer.name.surname}`
-            : (unit?.shipping?.name?.full_name ?? null),
-        buyer_email: order.payer?.email_address ?? null,
-        shipping_address: unit?.shipping?.address ?? null,
-        amount: unit?.amount?.value ?? null,
-        currency: unit?.amount?.currency_code ?? "USD",
-        status: "completed",
-      },
-      { onConflict: "paypal_order_id", ignoreDuplicates: true },
-    )
-    .select("id");
-
-  if (insertError) {
-    console.error("PayPal webhook: order insert failed", insertError);
+  let result;
+  try {
+    result = await recordOrder(createServiceClient(), orderId, order);
+  } catch (err) {
+    // Not recorded: return 5xx so PayPal retries the delivery.
+    console.error(`PayPal webhook: failed to record order ${orderId}`, err);
     return NextResponse.json({ error: "db insert failed" }, { status: 500 });
   }
 
-  // Empty array means the upsert hit the unique constraint and was
-  // ignored -- this is a PayPal retry of an order we've already recorded,
-  // so skip the decrement to avoid double-counting.
-  if (!inserted || inserted.length === 0) {
+  if (result.status === "duplicate") {
     return NextResponse.json({ received: true, duplicate: true });
   }
 
-  const { error: decrementError } = await supabase.rpc("decrement_inventory", {
-    p_format: format,
-    p_qty: quantity,
+  // Only a newly inserted order gets an email. after() runs it once the
+  // response is sent, and sendNewOrderEmail never throws, so the email can't
+  // change what PayPal sees.
+  const { row, onHand } = result;
+  after(() => sendNewOrderEmail(row, onHand));
+
+  return NextResponse.json({
+    received: true,
+    format: row.format ?? "unconfirmed",
   });
-
-  if (decrementError) {
-    console.error(
-      `PayPal webhook: order ${orderId} recorded but inventory decrement failed`,
-      decrementError,
-    );
-  }
-
-  return NextResponse.json({ received: true });
 }
