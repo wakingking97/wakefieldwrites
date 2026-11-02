@@ -526,6 +526,8 @@ Kyler bought a signed paperback through /book to test the system. PayPal complet
 - **Also flagged:** the old Base44 site (`wakefieldwrites.base44.app`) is still live with its own Store page and cart. Old links (social bios, Amazon author page, early posts) may still send people there. Kyler should find and update those links and unpublish the Base44 app if Base44 allows it on the free tier.
 - **Still not connected (unchanged):** PayPal order webhook and the order email to Kyler (5w prompt saved), real inventory counts, and the reader accounts build (5af). Working and verified: reviews, News drafts + cron, chat assistant, analytics, Writing archive.
 
+**PayPal setup progress (2026-11-02):** Kyler created a new Live REST app `wakefieldwrites`. The site's button client ID (`BAAt…`) didn't match either existing app ("Birthday Adventures", "MyApp_Invoice_Simple"), so those were left alone. He added `PAYPAL_CLIENT_ID` and `PAYPAL_CLIENT_SECRET` to Vercel (Secret, Production; a first attempt with `_1`/`_2` suffixes was deleted and redone). Webhook + `PAYPAL_WEBHOOK_ID` + `PAYPAL_API_BASE` in progress. **Inventory:** Paperback 10, Hardcover Case Laminate 5, Hardcover w/Paper Sleeve 1, stocked separately because the sleeved edition costs more to print. Added to the PayPal prompt as items 11–13, plus an IPN fallback note in case the button's sales don't reach the new app's webhook.
+
 ## 6. Open items / needs from Kyler
 
 - [x] ~~Real book description/back-cover copy~~ — using manuscript's own "About This Book" text, confirmed
