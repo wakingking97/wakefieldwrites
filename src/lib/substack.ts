@@ -23,16 +23,21 @@ async function getJson<T>(url: string): Promise<T> {
 }
 
 export async function getRecentPosts(limit = 3): Promise<SubstackPost[]> {
-  const items = await getJson<
-    Array<{
-      title: string;
-      slug: string;
-      canonical_url: string;
-      post_date: string;
-      audience: string;
-      type?: string;
-    }>
-  >(`${SUBSTACK}/api/v1/archive?sort=new&limit=${limit}`);
+  type ArchiveItem = {
+    title: string;
+    slug: string;
+    canonical_url: string;
+    post_date: string;
+    audience: string;
+    type?: string;
+  };
+  // Substack has returned this endpoint both as a bare array and, since
+  // Nov 2026, wrapped as { posts: [...], nextCursor }. Accept either.
+  const data = await getJson<ArchiveItem[] | { posts?: ArchiveItem[] }>(
+    `${SUBSTACK}/api/v1/archive?sort=new&limit=${limit}`,
+  );
+  const items = Array.isArray(data) ? data : data?.posts;
+  if (!Array.isArray(items)) throw new Error("Substack archive: unexpected response shape");
 
   return items
     .filter((p) => p.title && p.slug && p.canonical_url && (!p.type || p.type === "newsletter"))

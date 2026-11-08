@@ -149,7 +149,10 @@ export async function runInsightsDraftJob(): Promise<DraftJobSummary> {
     posts = await getRecentPosts(POSTS_TO_CHECK);
   } catch (err) {
     console.error("insights-draft job: Substack archive fetch failed", err);
-    return summarize({ ok: false, error: "could not fetch Substack archive" });
+    return summarize({
+      ok: false,
+      error: `could not fetch Substack archive (${err instanceof Error ? err.message : String(err)})`,
+    });
   }
 
   const supabase = createServiceClient();

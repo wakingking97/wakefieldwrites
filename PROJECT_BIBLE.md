@@ -546,6 +546,10 @@ Built from `prompts/paypal-webhook-fixes.md`. All four 2026-08-29 safety require
 
 **Not verified:** a real PayPal webhook delivery (needs the push + Kyler's test purchase), the live admin page as Kyler, and email sending (no Resend key yet).
 
+
+## 5ai. News job: Substack archive response changed shape — FIXED, committed locally — 2026-11-08
+
+"What “Free” Costs" published Nov 8 and the admin showed "could not fetch Substack archive". Cause: Substack's `/api/v1/archive` now returns `{ posts: [...], nextCursor }` instead of a bare array (seen in Chrome Nov 8), so `items.filter` threw and the job reported a fetch failure. Fix in `src/lib/substack.ts`: accept either shape, throw a clear error on anything else. `insightsDraftJob.ts` now includes the underlying error text in the admin message, so a real network/403 problem shows its status code instead of the generic line. Kyler to push, then press "Check Substack now".
 ## 6. Open items / needs from Kyler
 
 - [x] ~~Real book description/back-cover copy~~ — using manuscript's own "About This Book" text, confirmed
