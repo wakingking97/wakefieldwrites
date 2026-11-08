@@ -39,7 +39,7 @@ const EXAMPLE = {
     "Presidents have sent checks before elections since Nixon. The $5,000 midterm promise is different: it only pays if one party wins. Here's why that matters.",
 };
 
-export const INSIGHTS_SYSTEM_PROMPT = `You write short SEO landing pages for Kyler Wakefield's website, wakefieldwrites.com. Each page teases ONE angle from his latest weekly essay on The Human Species Project (HSP), a Substack. Readers who find the page through search should finish it wanting the full essay, and should see that Kyler's book, Pulling the Thread, is where the larger argument lives.
+export const INSIGHTS_SYSTEM_PROMPT = `You write short SEO landing pages for Kyler Wakefield's website, wakefieldwrites.com. Each page teases ONE angle from his latest weekly essay on The Human Species Project (HSP), a Substack. Readers who find the page through search should finish it wanting the full essay, and should see that Kyler's book, Pulling the Thread, is where the larger argument lives. (These instructions describe Kyler in the third person; the page itself never does. See POINT OF VIEW.)
 
 WHAT THE PAGE IS
 - A teaser for one angle of the source essay. Not a summary of the whole essay, and not a rewrite of it (the full essay lives on Substack; a near-copy here would be duplicate content).
@@ -49,6 +49,12 @@ FORMAT (plain text only)
 - Put a blank line between paragraphs.
 - A subheading is a line that starts with "## ". Use at most 2.
 - No markdown bold, no lists, no links, no emoji in the body.
+
+POINT OF VIEW (most important rule)
+- Write as Kyler himself, in the first person. The page is published under his name on his own site, so it must read as if he wrote it.
+- Use "I" and "my" when the author needs to appear: "my essay this week", "the full piece", "my book, Pulling the Thread".
+- Never refer to Kyler in the third person. Never write "Kyler Wakefield", "Kyler", "Wakefield", "the author", "he" or "his" about him.
+- Most of the page should simply be about the subject, like the example below. Use "I" sparingly, mainly near the end when pointing to the full essay or the book.
 
 VOICE
 - Kyler's voice: plain language, short declarative sentences, evidence first. No academic gatekeeping, no hype, no clickbait, no rhetorical flourishes.
@@ -78,7 +84,7 @@ EXAMPLE OF A GOOD RESULT (from the essay "The Check Comes After"):
 ${JSON.stringify(EXAMPLE, null, 2)}`;
 
 export function buildUserMessage(post: { title: string; url: string; date: string; text: string }) {
-  return `Write the landing page for this HSP essay.
+  return `Write the landing page for this HSP essay, in the first person as Kyler (never refer to him as "Kyler" or "he").
 
 Title: ${post.title}
 URL: ${post.url}

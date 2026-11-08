@@ -550,6 +550,10 @@ Built from `prompts/paypal-webhook-fixes.md`. All four 2026-08-29 safety require
 ## 5ai. News job: Substack archive response changed shape — FIXED, committed locally — 2026-11-08
 
 "What “Free” Costs" published Nov 8 and the admin showed "could not fetch Substack archive". Cause: Substack's `/api/v1/archive` now returns `{ posts: [...], nextCursor }` instead of a bare array (seen in Chrome Nov 8), so `items.filter` threw and the job reported a fetch failure. Fix in `src/lib/substack.ts`: accept either shape, throw a clear error on anything else. `insightsDraftJob.ts` now includes the underlying error text in the admin message, so a real network/403 problem shows its status code instead of the generic line. Kyler to push, then press "Check Substack now".
+
+## 5aj. News drafts now written in Kyler's first person — FIXED, committed locally — 2026-11-08
+
+Kyler noticed drafts read as third person ("Kyler Wakefield's essay…"). Cause: `src/lib/insightsPrompt.ts` described him in the third person and never said what point of view to write in. Added a POINT OF VIEW section (write as Kyler, "I/my" sparingly, never "Kyler", "the author", "he") and a reminder in the user message. Existing third-person drafts don't change: delete the draft in admin → News, then press "Check Substack now" after the deploy to redraft.
 ## 6. Open items / needs from Kyler
 
 - [x] ~~Real book description/back-cover copy~~ — using manuscript's own "About This Book" text, confirmed
