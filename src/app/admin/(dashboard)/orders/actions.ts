@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase-server";
 import { createServiceClient } from "@/lib/supabase-service";
 import { isBookFormat } from "@/lib/orders";
+import { setAdminFlash } from "@/lib/adminFlash";
 
 // Server Actions bypass the proxy matcher, so each one re-checks auth
 // itself (same pattern as reviews/actions.ts). The accounts build will
@@ -30,9 +31,9 @@ export async function updateInventoryCount(formData: FormData) {
 
   const format = formData.get("format");
   const count = Number(formData.get("count"));
-  if (!isBookFormat(format)) throw new Error("Unknown format");
+  if (!isBookFormat(format)) return setAdminFlash("error", "Unknown format");
   if (!Number.isInteger(count) || count < -1000 || count > 100000) {
-    throw new Error("On-hand count must be a whole number");
+    return setAdminFlash("error", "On-hand count must be a whole number");
   }
 
   const { data, error } = await supabase
@@ -41,10 +42,11 @@ export async function updateInventoryCount(formData: FormData) {
     .eq("format", format)
     .select("format");
 
-  if (error) throw new Error(`Inventory update failed: ${error.message}`);
-  if (!data || data.length === 0) throw new Error("Inventory row not found");
+  if (error) return setAdminFlash("error", `Inventory update failed: ${error.message}`);
+  if (!data || data.length === 0) return setAdminFlash("error", "Inventory row not found");
 
   refresh();
+  await setAdminFlash("success", `Inventory updated: ${count} on hand.`);
 }
 
 // Sets the edition on a flagged (unconfirmed) order and applies it to
@@ -57,15 +59,16 @@ export async function setOrderFormat(formData: FormData) {
 
   const orderId = Number(formData.get("orderId"));
   const format = formData.get("format");
-  if (!Number.isInteger(orderId)) throw new Error("Bad order id");
-  if (!isBookFormat(format)) throw new Error("Choose a format");
+  if (!Number.isInteger(orderId)) return setAdminFlash("error", "Bad order id");
+  if (!isBookFormat(format)) return setAdminFlash("error", "Choose a format first");
 
   const { error } = await createServiceClient().rpc("set_order_format", {
     p_order_id: orderId,
     p_format: format,
   });
 
-  if (error) throw new Error(`Setting the format failed: ${error.message}`);
+  if (error) return setAdminFlash("error", `Setting the format failed: ${error.message}`);
 
   refresh();
+  await setAdminFlash("success", "Format set and inventory updated.");
 }

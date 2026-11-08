@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase-server";
 import { validateInsightInput } from "@/lib/insights";
 import { runInsightsDraftJob, type DraftJobSummary } from "@/lib/insightsDraftJob";
+import { setAdminFlash } from "@/lib/adminFlash";
 
 // Server Actions bypass the proxy matcher, so each one re-checks auth
 // itself (same pattern as reviews/actions.ts).
@@ -24,8 +25,10 @@ function refresh() {
   revalidatePath("/");
 }
 
-function fail(message: string): never {
-  redirect(`/admin/insights?error=${encodeURIComponent(message)}`);
+// Shows the reason in the admin banner and reloads the page.
+async function fail(message: string): Promise<never> {
+  await setAdminFlash("error", message);
+  redirect("/admin/insights");
 }
 
 function fields(formData: FormData) {
@@ -36,13 +39,14 @@ function fields(formData: FormData) {
 export async function createDraft(formData: FormData) {
   const supabase = await requireAdmin();
   const result = fields(formData);
-  if ("error" in result) fail(result.error);
+  if ("error" in result) return fail(result.error);
 
   const { error } = await supabase
     .from("insights")
     .insert({ ...result.value, status: "draft" });
-  if (error) fail(error.code === "23505" ? "That slug already exists" : error.message);
+  if (error) return fail(error.code === "23505" ? "That slug already exists" : error.message);
   refresh();
+  await setAdminFlash("success", "Draft created.");
 }
 
 // Save edits without changing status.
@@ -50,11 +54,12 @@ export async function saveInsight(formData: FormData) {
   const supabase = await requireAdmin();
   const id = Number(formData.get("id"));
   const result = fields(formData);
-  if ("error" in result) fail(result.error);
+  if ("error" in result) return fail(result.error);
 
   const { error } = await supabase.from("insights").update(result.value).eq("id", id);
-  if (error) fail(error.code === "23505" ? "That slug already exists" : error.message);
+  if (error) return fail(error.code === "23505" ? "That slug already exists" : error.message);
   refresh();
+  await setAdminFlash("success", "Edits saved.");
 }
 
 // Save edits, then publish. published_at is only set the first time, so
@@ -63,7 +68,7 @@ export async function publishInsight(formData: FormData) {
   const supabase = await requireAdmin();
   const id = Number(formData.get("id"));
   const result = fields(formData);
-  if ("error" in result) fail(result.error);
+  if ("error" in result) return fail(result.error);
 
   const { data: existing } = await supabase
     .from("insights")
@@ -79,16 +84,18 @@ export async function publishInsight(formData: FormData) {
       published_at: existing?.published_at ?? new Date().toISOString(),
     })
     .eq("id", id);
-  if (error) fail(error.code === "23505" ? "That slug already exists" : error.message);
+  if (error) return fail(error.code === "23505" ? "That slug already exists" : error.message);
   refresh();
+  await setAdminFlash("success", "Published. It's live on the News page.");
 }
 
 export async function deleteInsight(formData: FormData) {
   const supabase = await requireAdmin();
   const id = Number(formData.get("id"));
   const { error } = await supabase.from("insights").delete().eq("id", id);
-  if (error) fail(error.message);
+  if (error) return fail(error.message);
   refresh();
+  await setAdminFlash("success", "Deleted.");
 }
 
 // Manual trigger for the weekly Substack -> draft job. Calls the shared job
@@ -97,5 +104,15 @@ export async function checkSubstackNow(): Promise<DraftJobSummary> {
   await requireAdmin();
   const summary = await runInsightsDraftJob();
   revalidatePath("/admin/insights");
+  if (summary.error) {
+    await setAdminFlash("error", `Substack check failed: ${summary.error}`);
+  } else {
+    await setAdminFlash(
+      "success",
+      summary.drafted > 0
+        ? `Substack checked. ${summary.drafted} new draft${summary.drafted === 1 ? "" : "s"} ready to review.`
+        : "Substack checked. Nothing new to draft.",
+    );
+  }
   return summary;
 }

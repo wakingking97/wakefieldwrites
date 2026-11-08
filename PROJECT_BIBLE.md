@@ -554,6 +554,10 @@ Built from `prompts/paypal-webhook-fixes.md`. All four 2026-08-29 safety require
 ## 5aj. News drafts now written in Kyler's first person — FIXED, committed locally — 2026-11-08
 
 Kyler noticed drafts read as third person ("Kyler Wakefield's essay…"). Cause: `src/lib/insightsPrompt.ts` described him in the third person and never said what point of view to write in. Added a POINT OF VIEW section (write as Kyler, "I/my" sparingly, never "Kyler", "the author", "he") and a reminder in the user message. Existing third-person drafts don't change: delete the draft in admin → News, then press "Check Substack now" after the deploy to redraft.
+
+## 5ak. Admin success/failure banners — BUILT, committed locally — 2026-11-08
+
+Kyler asked for a pop-up confirming whether admin buttons worked. Every admin action now sets a one-shot cookie via `setAdminFlash()` (`src/lib/adminFlash.ts`); the admin layout reads it and `<AdminFlashBanner>` (`src/components/admin/`) shows a banner at the top — gold ✓ for success (5 s), red ✕ with the reason for failure (15 s), closable, then clears the cookie. Covered: News create/save/publish/delete and "Check Substack now"; Reviews approve/reject; Orders inventory count and set-format; Chats delete. Behaviour changes: News failures now show in the banner instead of a `?error=` URL param; Orders validation/DB failures show a banner instead of throwing; Reviews and Chats now check DB errors (they were silently ignored before). Added `admin/(dashboard)/error.tsx` so any uncaught action error (e.g. expired sign-in) shows a message and "Try again" instead of a broken page. tsc + eslint clean; not yet tested on the live admin.
 ## 6. Open items / needs from Kyler
 
 - [x] ~~Real book description/back-cover copy~~ — using manuscript's own "About This Book" text, confirmed

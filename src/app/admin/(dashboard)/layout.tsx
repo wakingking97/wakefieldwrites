@@ -1,7 +1,10 @@
 import Link from "next/link";
+import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase-server";
 import { signOut } from "./actions";
+import AdminFlashBanner from "@/components/admin/AdminFlashBanner";
+import { ADMIN_FLASH_COOKIE, parseAdminFlash } from "@/lib/adminFlashShared";
 
 const ADMIN_NAV = [
   { href: "/admin", label: "Dashboard" },
@@ -31,8 +34,12 @@ export default async function AdminDashboardLayout({
     redirect("/admin/login");
   }
 
+  // Set by admin Server Actions via setAdminFlash(); shown once as a banner.
+  const flash = parseAdminFlash((await cookies()).get(ADMIN_FLASH_COOKIE)?.value);
+
   return (
     <div className="min-h-full">
+      <AdminFlashBanner flash={flash} />
       <header className="border-b border-line">
         <div className="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-4 px-6 py-5">
           <Link href="/admin" className="font-serif text-lg tracking-tight text-foreground">
